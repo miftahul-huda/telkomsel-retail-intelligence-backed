@@ -1,0 +1,17 @@
+[
+    { "path" :  "/", "router"  : "./routes/index" },
+    { "path" :  "/country", "router"  : "./routes/country" },
+    { "path" :  "/city", "router"  : "./routes/city" },
+    { "path" :  "/user", "router"  : "./routes/user" },
+    { "path" :  "/web", "router"  : "./routes/web" },
+    { "path" :  "/upload", "router"  : "./routes/upload" },
+    { "path" :  "/country", "router"  : "./routes/country" },
+    { "path" :  "/city", "router"  : "./routes/city" },
+    { "path" :  "/operator", "router"  : "./routes/operator" },
+    { "path" :  "/suboperator", "router"  : "./routes/suboperator" },
+    { "path" :  "/package", "router"  : "./routes/package" },
+    { "path" :  "/store", "router"  : "./routes/store" },
+    { "path" :  "/uploadfile", "router"  : "./routes/uploadfile" },
+    { "path" :  "/filepackageitem", "router"  : "./routes/filepackageitem" },
+    { "path" :  "/log", "router"  : "./routes/log" }
+]
