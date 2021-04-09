@@ -1,10 +1,11 @@
-service: default
+service: prod-retail-intelligence-api
 runtime: nodejs12
 env: standard
 env_variables:
   PORT: "8080"
-  DBHOST: "34.101.132.209"
+  DBHOST: "34.101.186.187"
   DBNAME: "retail-intelligence"
   DBUSER: "nodeuser"
   DBPASSWORD: "rotikeju98"
   DBENGINE: "postgresql"
+  APPLICATION_PORT: 8080

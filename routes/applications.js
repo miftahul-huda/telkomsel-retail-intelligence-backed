@@ -4,8 +4,15 @@ var router = express.Router();
 const ApplicationLogic = require('../modules/logic/applicationlogic')
 
 /* GET applications listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/check/update/:version', function(req, res, next) {
+  let version = req.params.version;
+  ApplicationLogic.checkUpdate(version).then(function (savedApplication)
+  {
+    res.send(savedApplication);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
 });
 
 router.post('/register', function (req, res){

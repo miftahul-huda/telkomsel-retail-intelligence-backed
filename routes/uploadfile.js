@@ -61,6 +61,7 @@ router.get('/get/:id', function (req, res){
       res.send(uploadfile);
     }).catch(function (err){
       console.log("error")
+      console.log(err)
       res.send(err);
     })
 })
@@ -88,6 +89,7 @@ router.post('/update/:id', function (req, res){
     res.send(saveduploadfile);
   }).catch(function (err){
     console.log("error")
+    console.log(err);
     res.send(err);
   })
 })

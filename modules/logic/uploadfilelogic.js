@@ -81,7 +81,8 @@ class UploadFileLogic {
                     uploaded_by_email : {
                         [Op.like] : email
                     }
-                }
+                },
+                order:[['id', 'desc'] ]
             })
             return { success: true, payload: uploadfiles }
         }
@@ -115,7 +116,7 @@ class UploadFileLogic {
     static async get(id)
     {
         try{
-            let uploadfile  = await UploadFileModel.findByPk(id, { include: CountryAndCityModel } );
+            let uploadfile  = await UploadFileModel.findByPk(id);
             return { success: true, payload: uploadfile }
         }
         catch (error)
@@ -126,7 +127,7 @@ class UploadFileLogic {
 
     static async update(id,  uploadfile)
     {
-        let result = this.successate(uploadfile);
+        let result = this.validate(uploadfile);
         console.log(id)
         if(result.success){
             try {

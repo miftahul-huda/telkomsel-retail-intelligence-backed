@@ -1,12 +1,19 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
+const session = require('express-session');
+const {Datastore} = require('@google-cloud/datastore');
+const {DatastoreStore} = require('@google-cloud/connect-datastore');
+
 var Initialization = require("./initialization")
 
-const port = 3000
+
+const port = process.env.PORT;
+
 
 var ejs = require('ejs'); 
 ejs.open = '{{'; 
@@ -19,6 +26,19 @@ var app = express();
 app.use(express.json({type: '*/*'}));
 // parse application/json
 app.use(bodyParser.json())
+
+/*app.use(session({
+  store: new DatastoreStore({
+    dataset: new Datastore(),
+    kind: 'express-sessions',
+  }),
+  secret: 'authentication',saveUninitialized: true,resave: false}));
+  */
+
+/*app.use(function(req, res, next) {
+  res.setHeader('Strict-Transport-Security', 'max-age=10886400; includeSubDomains')
+});*/
+  
 
 //Dynamic routing based on configuration
 const fs = require('fs');
@@ -58,15 +78,20 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+
+  
 });
 
-app.listen(3005)
+
+app.listen(process.env.APPLICATION_PORT)
+
+
+
 Initialization.initializeDatabase();
 
-
+console.log("Authentication server on  port : " + process.env.APPLICATION_PORT)
 
 module.exports = app;

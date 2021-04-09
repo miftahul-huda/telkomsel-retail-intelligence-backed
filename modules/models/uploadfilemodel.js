@@ -15,7 +15,7 @@ class UploadFileModel extends Model {
             lon: DataTypes.DECIMAL,
             lat: DataTypes.DECIMAL,
             alt: DataTypes.DECIMAL,
-            store_id: DataTypes.INTEGER,
+            store_id: DataTypes.STRING,
             store_name: DataTypes.TEXT,
 
             exposure_time: DataTypes.DECIMAL,
@@ -43,6 +43,8 @@ class UploadFileModel extends Model {
             isPoster: DataTypes.INTEGER,
             posterType: DataTypes.STRING,
             areaPromotion: DataTypes.STRING,
+            imageCategory: DataTypes.STRING,
+            operatorDominant: DataTypes.STRING,
 
             isTransfered: DataTypes.INTEGER
 

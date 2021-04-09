@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-const FilePackageItemLogic = require('../modules/logic/filepackageitemlogic')
+const StoreFrontItemLogic = require('../modules/logic/storefrontitemlogic')
 
 
 router.post('/create', function (req, res){
-    let filePackageItem = req.body;
-    console.log("filePackageItem")
-    console.log(filePackageItem)
+    let stroreFrontItem = req.body;
+    console.log("stroreFrontItem")
+    console.log(stroreFrontItem)
 
-    FilePackageItemLogic.create(filePackageItem).then(function (filePackageItem)
+    StoreFrontItemLogic.create(stroreFrontItem).then(function (stroreFrontItem)
     {
-        res.send(filePackageItem);
+        res.send(stroreFrontItem);
     }).catch(function (err){
         console.log("error")
         res.send(err);
@@ -20,35 +20,32 @@ router.post('/create', function (req, res){
 
 router.get('/', function (req, res){
 
-  FilePackageItemLogic.findAll().then(function (filePackageItems)
+  StoreFrontItemLogic.findAll().then(function (stroreFrontItems)
     {
-        res.send(filePackageItems);
+        res.send(stroreFrontItems);
     }).catch(function (err){
         console.log("error")
-        console.log(err);
         res.send(err);
     })
 })
 
-
 router.get('/transfered/:isTransfered', function (req, res){
 
   let isTransfered = req.params.isTransfered;
-  FilePackageItemLogic.findByIsTransfered(isTransfered).then(function (filePackageItems)
+  StoreFrontItemLogic.findByIsTransfered(isTransfered).then(function (stroreFrontItems)
   {
-      res.send(filePackageItems);
+      res.send(stroreFrontItems);
   }).catch(function (err){
       console.log("error")
-      console.log(err);
       res.send(err);
   })
 })
 
 router.get('/file/:id', function (req, res){
     let id = req.params.id;
-    FilePackageItemLogic.findByFileId(id).then(function (filePackageItems)
+    StoreFrontItemLogic.findByFileId(id).then(function (stroreFrontItems)
     {
-        res.send(filePackageItems);
+        res.send(stroreFrontItems);
     }).catch(function (err){
         console.log("error")
         res.send(err);
@@ -59,9 +56,9 @@ router.get('/file/:id', function (req, res){
 router.get('/get/:id', function (req, res){
     let id = req.params.id;
   
-    FilePackageItemLogic.get(id).then(function (filePackageItem)
+    StoreFrontItemLogic.get(id).then(function (stroreFrontItem)
     {
-      res.send(filePackageItem);
+      res.send(stroreFrontItem);
     }).catch(function (err){
       console.log("error")
       res.send(err);
@@ -72,12 +69,12 @@ router.get('/get/:id', function (req, res){
 
 
 router.post('/update/:id', function (req, res){
-  let filePackageItem = req.body;
+  let stroreFrontItem = req.body;
   let id = req.params.id;
 
-  FilePackageItemLogic.update(id, filePackageItem).then(function (filePackageItem)
+  StoreFrontItemLogic.update(id, stroreFrontItem).then(function (stroreFrontItem)
   {
-    res.send(filePackageItem);
+    res.send(stroreFrontItem);
   }).catch(function (err){
     console.log("error")
     res.send(err);
@@ -88,9 +85,9 @@ router.post('/update-istransfered/:isTransfered', function (req, res){
   let isTransfered = req.params.isTransfered;
   let ids = req.body.ids;
 
-  FilePackageItemLogic.updateIsTransfered(ids, isTransfered).then(function (filePackageItems)
+  StoreFrontItemLogic.updateIsTransfered(ids, isTransfered).then(function (stroreFrontItems)
   {
-    res.send(filePackageItems);
+    res.send(stroreFrontItems);
   }).catch(function (err){
     console.log("error")
     res.send(err);
@@ -100,7 +97,7 @@ router.post('/update-istransfered/:isTransfered', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  FilePackageItemLogic.delete(id, filePackageItem).then(function (result)
+  StoreFrontItemLogic.delete(id, stroreFrontItem).then(function (result)
   {
     res.send(result);
   }).catch(function (err){
@@ -112,7 +109,7 @@ router.get('/delete/:id', function (req, res){
 router.get('/delete-by-uploadid/:id', function (req, res){
   let id = req.params.id;
 
-  FilePackageItemLogic.deleteByUploadId(id).then(function (result)
+  StoreFrontItemLogic.deleteByUploadId(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){

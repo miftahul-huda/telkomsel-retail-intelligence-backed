@@ -33,6 +33,30 @@ class ApplicationLogic {
 
     }
 
+    static async checkUpdate(version)
+    {
+        try {
+            let apps = await ApplicationModel.findAll();
+
+            if(apps.length > 0)
+            {
+                let app = apps[0];
+                if(app.version != version)
+                {
+                    return { success: true, payload: app, message: "Please update to new version"};
+                }
+                else
+                {
+                    return { success: false, payload: null, message: "App already updated"};
+                }
+            }
+        }
+        catch(error)
+        {
+            throw { success: false, message: 'error', error: error };
+        }
+    }
+
     static async findAll()
     {
         try{

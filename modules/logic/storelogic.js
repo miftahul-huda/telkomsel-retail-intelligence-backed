@@ -9,10 +9,15 @@ const sequelize = new Sequelize({
 
 class StoreLogic {
 
-    static async findAll()
+    static async findAll(area)
     {
         try{
+            let where = {};
+            if(area != null)
+                where = { store_area: area }
+
             let stores  = await StoreModel.findAll({
+                where: where,
                 limit: 30
             });
             return { success: true, payload: stores }
@@ -23,17 +28,66 @@ class StoreLogic {
         }
     }
 
-    static async findByKeyword(keyword)
+    static async findAllArea(area)
     {
         try{
+
+            let areas  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_area')), 'area']]
+            });
+
+            return { success: true, payload: areas }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllNoLimit(area)
+    {
+        try{
+            let where = {};
+            if(area != null)
+                where = { store_area: area }
+
             let stores  = await StoreModel.findAll({
-                where: {
-                    [Op.or] : [
-                        {store_name: { [Op.like] : '%' + keyword + '%' }}
+                where: where
+            });
+            return { success: true, payload: stores }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findByKeyword(keyword, area)
+    {
+        try{
+            let where = {
+                [Op.or] : [
+                    {store_name: { [Op.like] : '%' + keyword + '%' }},
+                    {storeid: { [Op.like] : '%' + keyword + '%' }}
+                ]
+            };
+
+            if(area != null)
+            {
+                where = {
+                    [Op.and] : [
+                        where,
+                        {store_area: area}   
                     ]
-                },
+                }
+            }
+
+            let stores  = await StoreModel.findAll({
+                where: where,
                 limit: 30
             });
+
+
             return { success: true, payload: stores  }
         }
         catch (error)

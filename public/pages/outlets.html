@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+<%- include ("./header.html") -%>
+
+    <div class="card-body">
+        <div class="position-relative form-group">
+            <button id="btn-add" type="button" class="btn btn-block btn-primary">Add</button>
+        </div>
+
+        <div class="position-relative form-group" style="display: flex;">
+
+            <div class="form-group" style="width: 40%;">
+                <label style="font-weight: bold;">Area</label>
+                <select id="area" class="form-control select2" style="width: 100%;">
+                </select>
+            </div>
+
+        </div>
+        <table id="datatable"></table>
+
+    </div>
+
+<%- include ("./footer.html") -%>
+</body>
+
+<script>
+$(document).ready(function(){
+
+    loadAreas(function(areas){
+        displayAreas(areas);
+        loadOutlets();
+    })
+
+    $("#btn-add").click(function(e){
+        location = 'registeroutlet'
+    });
+
+    $("#area").on("change", function(e){
+        loadOutlets();
+    });
+})
+
+var table = null;
+function loadOutlets()
+{
+    var value =  $("#area").val();
+    var url = "/store/by-area/nolimit/" + value;
+
+    $("#loader").show();
+    $.get(url, function(response){
+        if(response.success)
+        {
+            var outlets = response.payload;
+            console.log(outlets)
+
+            for(var i=0; i < outlets.length; i++)
+            {
+                outlets[i].delete = "<div style='cursor: pointer' onclick='deleteOutlet(" + outlets[i].id + ")'>x</div>"
+            }
+
+            if(table != null)
+                table.destroy();
+
+            table = $("#datatable").DataTable({
+                data: outlets,
+                columns: [
+                    { title: "ID", data:"storeid"},
+                    { title: "Name", data: "store_name"},
+                    { title: "Area", data: "store_area"},
+                    { title: "Branch", data: "store_branch"},
+                    { title: "Region", data: "store_region"},
+                    { title: '' , data: "delete"}
+                ]
+            })
+        }
+        else{
+            alert(response.error);
+        }
+        $("#loader").hide();
+    });    
+}
+
+function loadAreas(callback)
+{
+    var url = "/store/area";  
+    $("#loader").show();
+    $.get(url, function(response){
+        $("#loader").hide();
+        var areas = response.payload;
+        if(callback != null)
+            callback(areas);
+    });
+}
+
+function displayAreas(areas)
+{
+    $("#area").html("");
+
+    areas.map(function(item){
+        $("#area").append("<option value='" + item.area + "'>" + item.area + "</option>")
+    });
+}
+
+
+function deleteOrg(i)
+{
+
+    var url = "/store/delete/" + i;
+    $.get(url,  function(response){
+        if(response.success)
+        {
+            loadOutlets();
+        }
+        else{
+            alert(response.error);
+        }
+    });
+}
+
+</script>
+</html>
+
+

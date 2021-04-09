@@ -1,29 +1,25 @@
-const FilePackageItemModel  = require( '../models/filepackageitemmodel')
+const StoreFrontItemModel  = require( '../models/storefrontitemmodel')
 const { Sequelize, Model, DataTypes, QueryTypes } = require('sequelize');
 const { Op } = require("sequelize");
 const Initialization = require('../../initialization');
 const UploadFileModel = require('../models/uploadfilemodel');
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
 
-class FilePackageItemLogic {
+class StoreFrontItemLogic {
 
 
-    static async create(filePackageItem)
+    static async create(fileStoreFrontItem)
     {
-        delete filePackageItem.id;
-        filePackageItem.id = null;
-        let result = this.validateCreate(filePackageItem);
+        delete fileStoreFrontItem.id;
+        fileStoreFrontItem.id = null;
+        let result = this.validateCreate(fileStoreFrontItem);
         if(result.success){
             try {
-                filePackageItem.isTransfered = 0;
-                let newfilePackageItem = await FilePackageItemModel.create(filePackageItem);
-                console.log(newfilePackageItem);
+                fileStoreFrontItem.isTransfered = 0;
+                let newfileStoreFrontItem = await StoreFrontItemModel.create(fileStoreFrontItem);
+                console.log(newfileStoreFrontItem);
                 //newUploadFile = this.clear(uploadfile)
-                result.payload = newfilePackageItem;
+                result.payload = newfileStoreFrontItem;
                 return  result;
             }
             catch(error)
@@ -43,8 +39,8 @@ class FilePackageItemLogic {
     static async findAll()
     {
         try{
-            let filePackageItems  = await FilePackageItemModel.findAll()
-            return { success: true, payload: filePackageItems }
+            let fileStoreFrontItems  = await StoreFrontItemModel.findAll()
+            return { success: true, payload: fileStoreFrontItems }
         }
         catch (error)
         {
@@ -56,23 +52,24 @@ class FilePackageItemLogic {
     {
         try{
             let sequelize = Initialization.getSequelize();
-            let query = "SELECT filepackageitem.*, uploadfile.*, uploadfile.id  " + 
-            "FROM filepackageitem inner join " +
-            "uploadfile on filepackageitem.upload_file_id = uploadfile.id " +
+            const fileStoreFrontItems = await sequelize.query("SELECT storefrontitem.*, uploadfile.*, uploadfile.id  FROM storefrontitem inner join " +
+            "uploadfile on storefrontitem.upload_file_id = uploadfile.id " +
             "where " +
-            "\"uploadfile\".\"isTransfered\" = " + isTransfered;
-            console.log(query);
-            let filePackageItems  = await sequelize.query(query, { type: QueryTypes.SELECT });
-            
-            /*await FilePackageItemModel.findAll({
+            "\"uploadfile\".\"isTransfered\" = " + isTransfered, { type: QueryTypes.SELECT, raw: true });
+
+            fileStoreFrontItems
+
+            /*let fileStoreFrontItems  = await StoreFrontItemModel.findAll({
                 where: {
                     isTransfered: isTransfered
                 }
             })*/
-            return { success: true, query: query,  payload: filePackageItems, total: filePackageItems.length }
+            return { success: true, payload: fileStoreFrontItems }
         }
         catch (error)
         {
+            console.log("ERROR")
+            console.log(error);
             throw { success: false, message: '', error: error };
         }
     }
@@ -81,12 +78,12 @@ class FilePackageItemLogic {
     static async findByFileId(fileid)
     {
         try{
-            let filePackageItems  = await FilePackageItemModel.findAll({
+            let fileStoreFrontItems  = await StoreFrontItemModel.findAll({
                 where: {
                     upload_file_id : fileid
                 }
             })
-            return { success: true, payload: filePackageItems }
+            return { success: true, payload: fileStoreFrontItems }
         }
         catch (error)
         {
@@ -99,8 +96,8 @@ class FilePackageItemLogic {
     static async get(id)
     {
         try{
-            let filePackageItem  = await FilePackageItemModel.findByPk(id );
-            return { success: true, payload: filePackageItem }
+            let fileStoreFrontItem  = await StoreFrontItemModel.findByPk(id );
+            return { success: true, payload: fileStoreFrontItem }
         }
         catch (error)
         {
@@ -108,14 +105,14 @@ class FilePackageItemLogic {
         }
     }
 
-    static async update(id,  filePackageItem)
+    static async update(id,  fileStoreFrontItem)
     {
-        let result = this.validateCreate(filePackageItem);
+        let result = this.validateCreate(fileStoreFrontItem);
         console.log(id)
         if(result.success){
             try {
-                let filePackageItem = await FilePackageItemModel.update(filePackageItem, { where:  { id: id }  });
-                result.payload = filePackageItem;
+                let fileStoreFrontItem = await StoreFrontItemModel.update(fileStoreFrontItem, { where:  { id: id }  });
+                result.payload = fileStoreFrontItem;
                 return  result;
             }
             catch(error)
@@ -140,11 +137,8 @@ class FilePackageItemLogic {
             for(var i = 0; i < sIds.length; i++)
                 sIds[i] = parseInt(sIds[i])
 
-            let uploadFiles = await UploadFileModel.update({ isTransfered : isTransfered }, { where:  { id: {[Op.in]:  sIds} }});
+            let uploadFiles = await UploadFileModel.update({ isTransfered : isTransfered }, { where:  { id: {[Op.in] : sIds }}});
             
-            console.log("updateIsTransfered " + isTransfered)
-            console.log(uploadFiles);
-
             result.payload = uploadFiles;
             return  result;
         }
@@ -157,8 +151,8 @@ class FilePackageItemLogic {
     static async delete(id)
     {
         try{
-            let filePackageItem  = await FilePackageItemModel.findByPk(id);
-            let result = await FilePackageItemModel.destroy(filePackageItem);
+            let fileStoreFrontItem  = await StoreFrontItemModel.findByPk(id);
+            let result = await StoreFrontItemModel.destroy(fileStoreFrontItem);
             return { success: true, payload: result }
         }
         catch (error)
@@ -166,12 +160,13 @@ class FilePackageItemLogic {
             throw { success: false, message: '', error: error };
         }
     }
+
 
     static async deleteByUploadId(id)
     {
         try{
 
-            let result = await FilePackageItemModel.destroy({ where: { upload_file_id: id }});
+            let result = await StoreFrontItemModel.destroy({ where: { upload_file_id: id }});
             return { success: true, payload: result }
         }
         catch (error)
@@ -180,12 +175,11 @@ class FilePackageItemLogic {
         }
     }
 
-
-    static validateCreate(filePackageItem)
+    static validateCreate(fileStoreFrontItem)
     {
         
         return {success :  true, message: "Succesfull"}
     }
 }
 
-module.exports = FilePackageItemLogic;
+module.exports = StoreFrontItemLogic;

@@ -13,5 +13,8 @@
     { "path" :  "/store", "router"  : "./routes/store" },
     { "path" :  "/uploadfile", "router"  : "./routes/uploadfile" },
     { "path" :  "/filepackageitem", "router"  : "./routes/filepackageitem" },
-    { "path" :  "/log", "router"  : "./routes/log" }
+    { "path" :  "/storefrontitem", "router"  : "./routes/storefrontitem" },
+    { "path" :  "/log", "router"  : "./routes/log" },
+    { "path" :  "/report", "router"  : "./routes/report" },
+    { "path" :  "/application", "router"  : "./routes/applications" }
 ]

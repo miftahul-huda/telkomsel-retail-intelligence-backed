@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<%- include ("./headerscript.html") -%>
+</head>
+<body>
+<%- include ("./header.html") -%>
+
+    <div class="card-body">
+        <table id="datatable"></table>
+
+    </div>
+
+<%- include ("./footer.html") -%>
+</body>
+
+<script>
+$(document).ready(function(){
+    loadStorefronts();
+})
+
+var table = null;
+function loadStorefronts()
+{
+    var url = "/report/storefronts";
+    $("#loader").show();
+    $.get(url, function(response){
+        if(response.success)
+        {
+            var outlets = response.payload;
+            console.log(outlets)
+
+            for(var i=0; i < outlets.length; i++)
+            {
+                outlets[i].delete = "<div style='cursor: pointer' onclick='deleteStorefront(" + outlets[i].id + ")'>x</div>"
+            }
+
+            if(table != null)
+                table.destroy();
+
+            table = $("#datatable").DataTable({
+                data: outlets,
+                columns: [
+                    { title: "File", data:"uploaded_filename"},
+                    { title: "Upload Date", data: "upload_date"},
+                    { title: "Picture Taken Date", data: "picture_taken_date"},
+                    { title: "Picture Taken By", data: "picture_taken_by"},
+                    { title: "Operator", data: "operator"},
+                    { title: "GB", data: "gbmain"},
+                    { title: "Price", data: "price"},
+                    { title: "Validity", data: "validity"},
+                    { title: "Transfer Price", data: "transferPrice"},
+                    { title: "Category", data: "category"},
+                    { title: '' , data: "delete"}
+                ]
+            })
+        }
+        else{
+            alert(response.error);
+        }
+        $("#loader").hide();
+    });    
+}
+
+
+function deleteOrg(i)
+{
+
+    var url = "/store/delete/" + i;
+    $.get(url,  function(response){
+        if(response.success)
+        {
+            loadStorefronts();
+        }
+        else{
+            alert(response.error);
+        }
+    });
+}
+
+</script>
+</html>
+
+

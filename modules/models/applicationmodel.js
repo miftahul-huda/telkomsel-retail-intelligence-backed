@@ -6,10 +6,7 @@ class ApplicationModel extends Model {
         super.init({
             appname: DataTypes.STRING,
             appdescription: DataTypes.STRING,
-            clientid: DataTypes.STRING,
-            clientsecret: DataTypes.STRING,
-            callbackurl: DataTypes.STRING,
-            createdAt: DataTypes.DATE
+            version: DataTypes.STRING
         }, 
         { sequelize, modelName: 'application', tableName: 'application', force: force });
     }

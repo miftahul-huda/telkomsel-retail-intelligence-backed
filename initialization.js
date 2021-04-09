@@ -8,21 +8,25 @@ const PackageModel  = require( './modules/models/packagemodel')
 const StoreModel  = require( './modules/models/storemodel')
 const UploadFileModel  = require( './modules/models/uploadfilemodel')
 const FilePackageItemModel  = require( './modules/models/filepackageitemmodel')
+const StoreFrontItemModel  = require( './modules/models/storefrontitemmodel')
 const LogModel  = require( './modules/models/logmodel')
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
-/*const sequelize = new Sequelize('retail-intelligence', 'nodeuser', 'rotikeju98', {
-    host: '34.101.132.209',
-    dialect: 'postgres'  
-});*/
+
 
 
 const sequelize = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
     host: process.env.DBHOST,
-    dialect: process.env.DBENGINE  
+    dialect: 'postgresql'  
 });
 
 class Initialization {
+
+    static getSequelize()
+    {
+        return sequelize;
+    }
+
     static async initializeDatabase(){
 
         let force = false;
@@ -49,6 +53,8 @@ class Initialization {
         UploadFileModel.initialize(sequelize, force);
 
         FilePackageItemModel.initialize(sequelize, force);
+
+        StoreFrontItemModel.initialize(sequelize, force);
  
         UserModel.belongsTo(CountryAndCityModel, { foreignKey: 'cityId' })
 
@@ -56,7 +62,10 @@ class Initialization {
 
         //PackageModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
 
-        UploadFileModel.belongsTo(StoreModel, {foreignKey: 'store_id' })
+        //FilePackageItemModel.belongsTo(UploadFileModel, {foreignKey: 'upload_file_id' })
+
+        //StoreFrontItemModel.belongsTo(UploadFileModel, {foreignKey: 'upload_file_id' })
+
 
         await sequelize.sync();
 
