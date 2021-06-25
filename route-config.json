@@ -13,8 +13,12 @@
     { "path" :  "/store", "router"  : "./routes/store" },
     { "path" :  "/uploadfile", "router"  : "./routes/uploadfile" },
     { "path" :  "/filepackageitem", "router"  : "./routes/filepackageitem" },
+    { "path" :  "/filepackagesubitem", "router"  : "./routes/filepackagesubitem" },
     { "path" :  "/storefrontitem", "router"  : "./routes/storefrontitem" },
     { "path" :  "/log", "router"  : "./routes/log" },
     { "path" :  "/report", "router"  : "./routes/report" },
-    { "path" :  "/application", "router"  : "./routes/applications" }
+    { "path" :  "/application", "router"  : "./routes/applications" },
+    { "path" :  "/itemsubcategory", "router"  : "./routes/itemsubcategory" },
+    { "path" :  "/itemsubcategorytype", "router"  : "./routes/itemsubcategorytype" },
+    { "path" :  "/productcatalog", "router"  : "./routes/productcatalog" }
 ]

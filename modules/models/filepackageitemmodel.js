@@ -21,7 +21,10 @@ class FilePackageItemModel extends Model {
             transferPrice: DataTypes.DECIMAL,
             category: DataTypes.STRING,
             campaignTheme: DataTypes.STRING,
-            isTransfered: DataTypes.INTEGER
+            isTransfered: DataTypes.INTEGER,
+            itemCategory: DataTypes.STRING,
+            itemCategoryText: DataTypes.STRING,
+            tempid: DataTypes.STRING
         }, 
         { sequelize, modelName: 'filepackageitem', tableName: 'filepackageitem', force: force });
     }

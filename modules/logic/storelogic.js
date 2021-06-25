@@ -17,6 +17,7 @@ class StoreLogic {
                 where = { store_area: area }
 
             let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
                 where: where,
                 limit: 30
             });
@@ -52,6 +53,7 @@ class StoreLogic {
                 where = { store_area: area }
 
             let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
                 where: where
             });
             return { success: true, payload: stores }
@@ -67,8 +69,8 @@ class StoreLogic {
         try{
             let where = {
                 [Op.or] : [
-                    {store_name: { [Op.like] : '%' + keyword + '%' }},
-                    {storeid: { [Op.like] : '%' + keyword + '%' }}
+                    {store_name: { [Op.iLike] : '%' + keyword + '%' }},
+                    {storeid: { [Op.iLike] : '%' + keyword + '%' }}
                 ]
             };
 
@@ -83,6 +85,7 @@ class StoreLogic {
             }
 
             let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
                 where: where,
                 limit: 30
             });

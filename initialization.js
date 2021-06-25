@@ -8,8 +8,12 @@ const PackageModel  = require( './modules/models/packagemodel')
 const StoreModel  = require( './modules/models/storemodel')
 const UploadFileModel  = require( './modules/models/uploadfilemodel')
 const FilePackageItemModel  = require( './modules/models/filepackageitemmodel')
+const FilePackageSubItemModel  = require( './modules/models/filepackagesubitemmodel')
 const StoreFrontItemModel  = require( './modules/models/storefrontitemmodel')
 const LogModel  = require( './modules/models/logmodel')
+const ItemSubCategoryModel  = require( './modules/models/itemsubcategorymodel')
+const ItemSubCategoryTypeModel  = require( './modules/models/itemsubcategorytypemodel')
+const ProductCatalogModel  = require( './modules/models/productcatalogmodel')
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 
@@ -54,9 +58,17 @@ class Initialization {
 
         FilePackageItemModel.initialize(sequelize, force);
 
+        FilePackageSubItemModel.initialize(sequelize, force);
+
+        ItemSubCategoryModel.initialize(sequelize, force);
+
+        ItemSubCategoryTypeModel.initialize(sequelize, force);
+
         StoreFrontItemModel.initialize(sequelize, force);
  
         UserModel.belongsTo(CountryAndCityModel, { foreignKey: 'cityId' })
+
+        ProductCatalogModel.initialize(sequelize, force);
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
 
