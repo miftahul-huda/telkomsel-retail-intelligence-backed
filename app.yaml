@@ -4,9 +4,9 @@ instance_class: F4
 env: standard
 env_variables:
   PORT: "8080"
-  DBHOST: "34.101.186.187"
-  DBNAME: "retail-intelligence"
-  DBUSER: "nodeuser"
-  DBPASSWORD: "rotikeju98"
+  DBHOST: ""
+  DBNAME: ""
+  DBUSER: ""
+  DBPASSWORD: ""
   DBENGINE: "postgresql"
   APPLICATION_PORT: 8080
