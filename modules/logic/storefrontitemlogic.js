@@ -111,8 +111,8 @@ class StoreFrontItemLogic {
         console.log(id)
         if(result.success){
             try {
-                let fileStoreFrontItem = await StoreFrontItemModel.update(fileStoreFrontItem, { where:  { id: id }  });
-                result.payload = fileStoreFrontItem;
+                let item = await StoreFrontItemModel.update(fileStoreFrontItem, { where:  { id: id }  });
+                result.payload = item;
                 return  result;
             }
             catch(error)
@@ -151,8 +151,8 @@ class StoreFrontItemLogic {
     static async delete(id)
     {
         try{
-            let fileStoreFrontItem  = await StoreFrontItemModel.findByPk(id);
-            let result = await StoreFrontItemModel.destroy(fileStoreFrontItem);
+
+            let result = await StoreFrontItemModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)

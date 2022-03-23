@@ -38,15 +38,35 @@ class UploadFileModel extends Model {
             x_resolution: DataTypes.DECIMAL,
             y_resolution: DataTypes.DECIMAL,
             operator: DataTypes.STRING,
+            operatorText: DataTypes.STRING,
             suboperator: DataTypes.STRING,
 
             isPoster: DataTypes.INTEGER,
             posterType: DataTypes.STRING,
+            posterTypeText: DataTypes.STRING,
             areaPromotion: DataTypes.STRING,
+            areaPromotionText: DataTypes.STRING,
             imageCategory: DataTypes.STRING,
+            imageStatus: DataTypes.STRING,
             operatorDominant: DataTypes.STRING,
+            operatorDominantText: DataTypes.STRING,
+            posterTheme: DataTypes.STRING,
 
-            isTransfered: DataTypes.INTEGER
+            //Information for Store front
+            productHero: DataTypes.STRING,
+            productHeroQuota: DataTypes.DECIMAL,
+            productHeroPrice: DataTypes.DECIMAL,
+            productHeroTransferPrice: DataTypes.DECIMAL,
+            productHeroValidity: DataTypes.DECIMAL,
+            productHeroCategory: DataTypes.STRING,
+            productHeroTheme: DataTypes.STRING,
+
+            beforeAfterID: DataTypes.STRING,
+            beforeAfterType: DataTypes.STRING,
+
+            isTransfered: DataTypes.INTEGER,
+            isuploaded: DataTypes.INTEGER,
+            tag: DataTypes.STRING
 
         }, 
         { sequelize, modelName: 'uploadfile', tableName: 'uploadfile', force: force });

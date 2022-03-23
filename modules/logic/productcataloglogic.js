@@ -168,8 +168,8 @@ class ProductCatalogLogic {
     static async delete(id)
     {
         try{
-            let productCatalog  = await ProductCatalogModel.findByPk(id);
-            let result = await ProductCatalogModel.destroy(productCatalog);
+
+            let result = await ProductCatalogModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)

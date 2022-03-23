@@ -110,7 +110,7 @@ router.post('/update/:id', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  ProductCatalogLogic.delete(id, log).then(function (result)
+  ProductCatalogLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){

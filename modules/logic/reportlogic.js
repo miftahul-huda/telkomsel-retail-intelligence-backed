@@ -4,6 +4,20 @@ const { Op, QueryTypes } = require("sequelize");
 
 
 class ReportLogic {
+    
+    static async getTotalUploadsByUploader(sequelize, uploader)
+    {
+        try{
+            const result = await sequelize.query("select count(*) as total from uploadfile where uploaded_by_email like '" + uploader + "'", { type: QueryTypes.SELECT });
+
+            return { success: true, payload: result};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
     static async getAllPostersWithPackageItems(sequelize)
     {
         try{
@@ -26,7 +40,7 @@ class ReportLogic {
 
             let sql = "select uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.upload_date, " +
-            "count(filepackageitem.upload_file_id) as total from " +
+            "count(filepackageitem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
             "filepackageitem on " +
             "uploadfile.id = filepackageitem.upload_file_id " +
@@ -69,7 +83,7 @@ class ReportLogic {
 
             let sql = "select uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
-            "count(filepackageitem.upload_file_id) as total from " +
+            "count(filepackageitem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
             "filepackageitem on " +
             "uploadfile.id = filepackageitem.upload_file_id " +
@@ -79,6 +93,52 @@ class ReportLogic {
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
             "order by uploadfile.id desc " +
             "offset " + offset + " limit " + limit;
+
+            const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
+            const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: posters, allTotal: totalData};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getAllPosterBeforeAfterByUploader(sequelize, uploader, offset, limit, opt=null)
+    {
+        try{
+
+            let sqlwhere = "";
+            if(opt != null)
+            {
+                if(opt.outlet != "*")
+                   sqlwhere = " and uploadfile.store_id like '" + opt.outlet + "' ";
+
+                if(opt.date != "*")
+                {
+                    let dt = new Date(opt.date).toISOString().slice(0, 10)
+                    sqlwhere = " and uploadfile.upload_date between '" + dt + " 00:00:00' and '" + dt + " 23:59:59' ";
+                }
+                   
+            }
+
+            let sqlTotal = "select count(*) as total from uploadfile where \"uploadfile\".\"imageCategory\" like 'poster-before-after' and \"uploadfile\".\"beforeAfterType\" like 'before'  and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere;
+
+            let sql = "select uploadfile.id, uploadfile.filename, \"uploadfile\".\"beforeAfterID\", \"uploadfile\".\"beforeAfterType\"," +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
+            "count(filepackageitem.upload_file_id) as \"totalItems\" from " +
+            "uploadfile left join " +
+            "filepackageitem on " +
+            "uploadfile.id = filepackageitem.upload_file_id " +
+            "where \"uploadfile\".\"imageCategory\" like 'poster-before-after'  and \"uploadfile\".\"beforeAfterType\" like 'before' " +
+            "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
+            "group by uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
+            "order by uploadfile.id desc " +
+            "offset " + offset + " limit " + limit;
+
+            console.log(sql)
 
             const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
             const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -114,7 +174,7 @@ class ReportLogic {
 
             let sql = "select uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
-            "count(storefrontitem.upload_file_id) as total from " +
+            "count(storefrontitem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
             "storefrontitem on " +
             "uploadfile.id = storefrontitem.upload_file_id " +
@@ -156,7 +216,7 @@ class ReportLogic {
 
             let sql = "select uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
-            "count(storefrontitem.upload_file_id) as total from " +
+            "count(storefrontitem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
             "storefrontitem on " +
             "uploadfile.id = storefrontitem.upload_file_id " +
@@ -171,6 +231,137 @@ class ReportLogic {
             const storefronts = await sequelize.query(sql, { type: QueryTypes.SELECT });
 
             return { success: true, payload: storefronts, allTotal: totalData};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getAllStoreFrontBeforeAfterByUploader(sequelize, uploader, offset, limit, opt=null)
+    {
+        try{
+            let sqlwhere = "";
+            if(opt != null)
+            {
+                if(opt.outlet != "*")
+                   sqlwhere = " and uploadfile.store_id like '" + opt.outlet + "' ";
+
+                if(opt.date != "*")
+                {
+                    let dt = new Date(opt.date).toISOString().slice(0, 10)
+                    sqlwhere = " and uploadfile.upload_date between '" + dt + " 00:00:00' and '" + dt + " 23:59:59' ";
+                }
+                   
+            }
+
+            let sqlTotal = "select count(*) as total from uploadfile where \"uploadfile\".\"imageCategory\" like 'storefront-before-after'  and \"uploadfile\".\"beforeAfterType\" like 'before' and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' "  + sqlwhere;
+
+            let sql = "select uploadfile.id, uploadfile.filename, \"uploadfile\".\"beforeAfterID\", \"uploadfile\".\"beforeAfterType\"," +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
+            "count(storefrontitem.upload_file_id) as \"totalItems\" from " +
+            "uploadfile left join " +
+            "storefrontitem on " +
+            "uploadfile.id = storefrontitem.upload_file_id " +
+            "where \"uploadfile\".\"imageCategory\" like 'storefront-before-after  and \"uploadfile\".\"beforeAfterType\" like 'before'' " +
+            "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
+            "group by uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
+            "order by uploadfile.id desc " +
+            "offset " + offset + " limit " + limit;
+
+            const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
+            const storefronts = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: storefronts, allTotal: totalData};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getAllTotalSalesByUploader(sequelize, uploader, offset, limit, opt=null)
+    {
+        try{
+
+            let sqlwhere = "";
+            if(opt != null)
+            {
+                if(opt.outlet != "*")
+                   sqlwhere = " and uploadfile.store_id like '" + opt.outlet + "' ";
+
+                if(opt.date != "*")
+                {
+                    let dt = new Date(opt.date).toISOString().slice(0, 10)
+                    sqlwhere = " and uploadfile.upload_date between '" + dt + " 00:00:00' and '" + dt + " 23:59:59' ";
+                }
+                   
+            }
+
+            let sqlTotal = "select count(*) as total from uploadfile where \"uploadfile\".\"imageCategory\" like 'total-sales' and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere;
+
+            let sql = "select uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
+            "count(totalsales.upload_file_id) as \"totalItems\" from " +
+            "uploadfile left join " +
+            "filepackageitem on " +
+            "uploadfile.id = totalsales.upload_file_id " +
+            "where \"uploadfile\".\"imageCategory\" like 'total-sales' " +
+            "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
+            "group by uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
+            "order by uploadfile.id desc " +
+            "offset " + offset + " limit " + limit;
+
+            const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
+            const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: posters, allTotal: totalData};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getAllEtalaseByUploader(sequelize, uploader, offset, limit, opt=null)
+    {
+        try{
+
+            let sqlwhere = "";
+            if(opt != null)
+            {
+                if(opt.outlet != "*")
+                   sqlwhere = " and uploadfile.store_id like '" + opt.outlet + "' ";
+
+                if(opt.date != "*")
+                {
+                    let dt = new Date(opt.date).toISOString().slice(0, 10)
+                    sqlwhere = " and uploadfile.upload_date between '" + dt + " 00:00:00' and '" + dt + " 23:59:59' ";
+                }
+                   
+            }
+
+            let sqlTotal = "select count(*) as total from uploadfile where \"uploadfile\".\"imageCategory\" like 'etalase' and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere;
+
+            let sql = "select uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
+            "count(etalase.upload_file_id) as \"totalItems\" from " +
+            "uploadfile left join " +
+            "filepackageitem on " +
+            "uploadfile.id = etalase.upload_file_id " +
+            "where \"uploadfile\".\"imageCategory\" like 'etalase' " +
+            "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
+            "group by uploadfile.id, uploadfile.filename, " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
+            "order by uploadfile.id desc " +
+            "offset " + offset + " limit " + limit;
+
+            const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
+            const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: posters, allTotal: totalData};
         }
         catch(err)
         {

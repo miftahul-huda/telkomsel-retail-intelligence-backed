@@ -106,8 +106,8 @@ class LogLogic {
     static async delete(id)
     {
         try{
-            let log  = await LogModel.findByPk(id);
-            let result = await LogModel.destroy(log);
+
+            let result = await LogModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)

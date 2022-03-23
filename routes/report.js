@@ -19,6 +19,21 @@ router.get('/posters/:offset/:limit', function (req, res){
     })
 })
 
+router.get('/uploads/total-by-uploader/:uploader', function (req, res){
+  
+    let uploader = req.params.uploader;
+
+    ReportLogic.getTotalUploadsByUploader(Initialization.getSequelize(), uploader).then(function (result)
+    {
+        res.send(result);
+    }).catch(function (err){
+        console.log("error")
+        console.log(err)
+        res.send(err);
+    })
+})
+
+
 router.post('/posters/byuploader/:uploader/:offset/:limit', function (req, res){
   
     let offset = req.params.offset;
@@ -27,6 +42,23 @@ router.post('/posters/byuploader/:uploader/:offset/:limit', function (req, res){
     let opt = req.body;
 
     ReportLogic.getAllPostersByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
+    {
+        res.send(result);
+    }).catch(function (err){
+        console.log("error")
+        console.log(err)
+        res.send(err);
+    })
+})
+
+router.post('/poster-before-after/byuploader/:uploader/:offset/:limit', function (req, res){
+  
+    let offset = req.params.offset;
+    let limit = req.params.limit;
+    let uploader = req.params.uploader;
+    let opt = req.body;
+
+    ReportLogic.getAllPosterBeforeAfterByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
     {
         res.send(result);
     }).catch(function (err){
@@ -60,6 +92,57 @@ router.post('/storefronts/byuploader/:uploader/:offset/:limit', function (req, r
     let opt = req.body;
 
     ReportLogic.getAllStoreFrontsByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
+    {
+        res.send(result);
+    }).catch(function (err){
+        console.log("error")
+        console.log(err)
+        res.send(err);
+    })
+})
+
+router.post('/storefront-before-after/byuploader/:uploader/:offset/:limit', function (req, res){
+  
+    let offset = req.params.offset;
+    let limit = req.params.limit;
+    let uploader = req.params.uploader;
+    let opt = req.body;
+
+    ReportLogic.getAllStoreFrontBeforeAfterByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
+    {
+        res.send(result);
+    }).catch(function (err){
+        console.log("error")
+        console.log(err)
+        res.send(err);
+    })
+})
+
+router.post('/totalsales/byuploader/:uploader/:offset/:limit', function (req, res){
+  
+    let offset = req.params.offset;
+    let limit = req.params.limit;
+    let uploader = req.params.uploader;
+    let opt = req.body;
+
+    ReportLogic.getAllTotalSalesByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
+    {
+        res.send(result);
+    }).catch(function (err){
+        console.log("error")
+        console.log(err)
+        res.send(err);
+    })
+})
+
+router.post('/etalase/byuploader/:uploader/:offset/:limit', function (req, res){
+  
+    let offset = req.params.offset;
+    let limit = req.params.limit;
+    let uploader = req.params.uploader;
+    let opt = req.body;
+
+    ReportLogic.getAllEtalaseByUploader(Initialization.getSequelize(), uploader, offset, limit, opt).then(function (result)
     {
         res.send(result);
     }).catch(function (err){

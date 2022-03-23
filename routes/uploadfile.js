@@ -66,6 +66,19 @@ router.get('/get/:id', function (req, res){
     })
 })
 
+router.get('/before-after/:id', function (req, res){
+  let id = req.params.id;
+
+  UploadFileLogic.getByBeforeAfterID(id).then(function (uploadfile)
+  {
+    res.send(uploadfile);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
 router.get('/search/:keyword', function (req, res){
     let keyword = req.params.keyword;
   
@@ -110,7 +123,7 @@ router.get('/update-istransfered/:ids/:isTransfered', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  UploadFileLogic.delete(id, uploadfile).then(function (result)
+  UploadFileLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){

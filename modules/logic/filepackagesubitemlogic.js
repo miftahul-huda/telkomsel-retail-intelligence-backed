@@ -114,8 +114,8 @@ class FilePackageSubItemLogic {
         console.log(id)
         if(result.success){
             try {
-                let filePackageSubItem = await FilePackageSubItemModel.update(filePackageSubItem, { where:  { id: id }  });
-                result.payload = filePackageSubItem;
+                let item = await FilePackageSubItemModel.update(filePackageSubItem, { where:  { id: id }  });
+                result.payload = item;
                 return  result;
             }
             catch(error)
@@ -157,8 +157,7 @@ class FilePackageSubItemLogic {
     static async delete(id)
     {
         try{
-            let filePackageSubItem  = await FilePackageSubItemModel.findByPk(id);
-            let result = await FilePackageSubItemModel.destroy(filePackageSubItem);
+            let result = await FilePackageSubItemModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)

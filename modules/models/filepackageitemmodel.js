@@ -24,7 +24,9 @@ class FilePackageItemModel extends Model {
             isTransfered: DataTypes.INTEGER,
             itemCategory: DataTypes.STRING,
             itemCategoryText: DataTypes.STRING,
-            tempid: DataTypes.STRING
+            tempid: DataTypes.STRING,
+            subitempackage: DataTypes.STRING,
+            subitempackageitems: DataTypes.STRING
         }, 
         { sequelize, modelName: 'filepackageitem', tableName: 'filepackageitem', force: force });
     }

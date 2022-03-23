@@ -46,6 +46,7 @@ let rawdata = fs.readFileSync('route-config.json');
 let routers = JSON.parse(rawdata);
 routers.forEach(function (route){
   var r = require(route.router);
+  console.log(route.path);
   app.use(route.path,  r)
 })
 

@@ -6,7 +6,9 @@ class ApplicationModel extends Model {
         super.init({
             appname: DataTypes.STRING,
             appdescription: DataTypes.STRING,
-            version: DataTypes.STRING
+            version: DataTypes.STRING,
+            appMessage: DataTypes.STRING,
+            appConfig: DataTypes.STRING,
         }, 
         { sequelize, modelName: 'application', tableName: 'application', force: force });
     }

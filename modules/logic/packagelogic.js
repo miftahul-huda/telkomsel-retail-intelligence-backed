@@ -9,13 +9,13 @@ const sequelize = new Sequelize({
 
 class CityLogic {
 
-    static async findAll(operator_id)
+    static async findAll(operator)
     {
-        console.log(operator_id)
+        console.log(operator)
         try{
             let packages  = await PackageModel.findAll({
                 where: {
-                    operator_id : operator_id
+                    operator : operator
                 }
             })
             return { success: true, payload: packages }

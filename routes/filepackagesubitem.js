@@ -100,7 +100,7 @@ router.post('/update-istransfered/:isTransfered', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  FilePackageSubItemLogic.delete(id, filePackageSubItem).then(function (result)
+  FilePackageSubItemLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){

@@ -62,6 +62,18 @@ router.get('/get/:id', function (req, res){
   })
 })
 
+router.get('/get-by-version/:version', function (req, res){
+  let id = req.params.version;
+
+  ApplicationLogic.getByVersion(id).then(function (application)
+  {
+    res.send(application);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
 router.post('/update/:id', function (req, res){
   let application = req.body;
   let id = req.params.id;

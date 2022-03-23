@@ -1,6 +1,10 @@
 const UploadFileModel  = require( '../models/uploadfilemodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
+const FilePackageItemLogic = require('./filepackageitemlogic');
+const StoreFrontItemLogic = require('./storefrontitemlogic')
+const TotalSalesModel = require('../models/totalsalesmodel')
+const EtalaseItemModel = require('../models/etalaseitemmodel')
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -8,6 +12,23 @@ const sequelize = new Sequelize({
 });
 
 class UploadFileLogic {
+
+    static async createPackageItems(packageItems)
+    {
+        packageItems.map(async (item)=>{
+            let newItem = await FilePackageItemLogic.create(item);
+            
+        })
+    }
+
+
+    static async createStoreFrontItems(storeFrontItems)
+    {
+        storeFrontItems.map(async (item)=>{
+            await StoreFrontItemLogic.create(item);
+        })
+    }
+
 
 
     static async create(uploadfile)
@@ -24,6 +45,45 @@ class UploadFileLogic {
                 console.log("id")
                 console.log(newUploadFile.id)
                 console.log("================")
+
+                if(uploadfile.packageItems != null && uploadfile.packageItems.length > 0)
+                {
+                    uploadfile.packageItems.forEach((item)=>{
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    await UploadFileLogic.createPackageItems(uploadfile.packageItems);
+                }
+
+                if(uploadfile.storeFrontItems != null && uploadfile.storeFrontItems.length > 0)
+                {
+                    uploadfile.storeFrontItems.forEach((item)=>{
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    await UploadFileLogic.createStoreFrontItems(uploadfile.storeFrontItems);
+                }
+
+                if(uploadfile.etalaseItems != null)
+                {
+                    let etalaseItems = uploadfile.etalaseItems;
+                    etalaseItems.forEach((item)=>{
+                        delete item.id;
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    let newEtalaseItems = await EtalaseItemModel.bulkCreate(etalaseItems)
+                    newUploadFile.etalaseItems = newEtalaseItems
+                }
+
+                if(uploadfile.totalSales != null)
+                {
+                    let totalSales = uploadfile.totalSales;
+                    totalSales.forEach((item)=>{
+                        delete item.id;
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    let newTotalSales = await TotalSalesModel.bulkCreate(totalSales)
+                    newUploadFile.etalaseItems = newTotalSales
+                }
+
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newUploadFile;
                 return  result;
@@ -125,6 +185,18 @@ class UploadFileLogic {
         }
     }
 
+    static async getByBeforeAfterID(id)
+    {
+        try{
+            let uploadfile  = await UploadFileModel.findAll({ where: { beforeAfterID: id } });
+            return { success: true, payload: uploadfile }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
     static async update(id,  uploadfile)
     {
         let result = this.validate(uploadfile);
@@ -174,8 +246,10 @@ class UploadFileLogic {
     static async delete(id)
     {
         try{
-            let uploadfile  = await UploadFileModel.findByPk(id);
-            let result = await UploadFileModel.destroy(uploadfile);
+
+            let result = await UploadFileModel.destroy({ where: { id: id }});
+            await FilePackageItemLogic.deleteByUploadId(id);
+            await StoreFrontItemLogic.deleteByUploadId(id);
             return { success: true, payload: result }
         }
         catch (error)

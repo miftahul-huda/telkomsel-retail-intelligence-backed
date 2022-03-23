@@ -80,6 +80,7 @@ router.post('/update/:id', function (req, res){
     res.send(filePackageItem);
   }).catch(function (err){
     console.log("error")
+    console.log(err)
     res.send(err);
   })
 })
@@ -100,11 +101,12 @@ router.post('/update-istransfered/:isTransfered', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  FilePackageItemLogic.delete(id, filePackageItem).then(function (result)
+  FilePackageItemLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){
     console.log("error")
+    console.log(err)
     res.send(err);
   })
 })

@@ -6,7 +6,8 @@ class OperatorModel extends Model {
         super.init({
             operator_name: DataTypes.STRING,
             operator_value: DataTypes.STRING,
-            operator_logo: DataTypes.TEXT
+            operator_logo: DataTypes.TEXT,
+            color: DataTypes.STRING,
         }, 
         { sequelize, modelName: 'operator', tableName: 'operator', force: force });
     }

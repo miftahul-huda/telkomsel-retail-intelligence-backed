@@ -5,6 +5,7 @@ const CountryAndCityModel  = require( './modules/models/countryandcitymodel')
 const OperatorModel  = require( './modules/models/operatormodel')
 const SubOperatorModel  = require( './modules/models/suboperatormodel')
 const PackageModel  = require( './modules/models/packagemodel')
+const PackageNameModel  = require( './modules/models/packagenamemodel')
 const StoreModel  = require( './modules/models/storemodel')
 const UploadFileModel  = require( './modules/models/uploadfilemodel')
 const FilePackageItemModel  = require( './modules/models/filepackageitemmodel')
@@ -14,6 +15,9 @@ const LogModel  = require( './modules/models/logmodel')
 const ItemSubCategoryModel  = require( './modules/models/itemsubcategorymodel')
 const ItemSubCategoryTypeModel  = require( './modules/models/itemsubcategorytypemodel')
 const ProductCatalogModel  = require( './modules/models/productcatalogmodel')
+const KeyValueItemModel  = require( './modules/models/keyvalueitemmodel')
+const TotalSalesModel  = require( './modules/models/totalsalesmodel')
+const EtalaseItemModel  = require( './modules/models/etalaseitemmodel')
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 
@@ -21,7 +25,8 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
     host: process.env.DBHOST,
-    dialect: 'postgresql'  
+    dialect: process.env.DBENGINE,
+    logging: false
 });
 
 class Initialization {
@@ -52,6 +57,8 @@ class Initialization {
 
         PackageModel.initialize(sequelize,force);
 
+        PackageNameModel.initialize(sequelize,force);
+
         StoreModel.initialize(sequelize, force);
 
         UploadFileModel.initialize(sequelize, force);
@@ -69,6 +76,13 @@ class Initialization {
         UserModel.belongsTo(CountryAndCityModel, { foreignKey: 'cityId' })
 
         ProductCatalogModel.initialize(sequelize, force);
+
+        KeyValueItemModel.initialize(sequelize, force);
+
+        TotalSalesModel.initialize(sequelize, force);
+
+        EtalaseItemModel.initialize(sequelize, force);
+
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
 

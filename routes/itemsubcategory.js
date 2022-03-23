@@ -75,7 +75,7 @@ router.post('/update/:id', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  ItemSubCategoryLogic.delete(id, itemSubCategory).then(function (result)
+  ItemSubCategoryLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){

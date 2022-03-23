@@ -88,8 +88,8 @@ class ItemSubCategoryTypeLogic {
         console.log(id)
         if(result.success){
             try {
-                let itemSubCategoryType = await ItemSubCategoryTypeModel.update(itemSubCategoryType, { where:  { id: id }  });
-                result.payload = itemSubCategoryType;
+                let item = await ItemSubCategoryTypeModel.update(itemSubCategoryType, { where:  { id: id }  });
+                result.payload = item;
                 return  result;
             }
             catch(error)
@@ -108,8 +108,8 @@ class ItemSubCategoryTypeLogic {
     static async delete(id)
     {
         try{
-            let itemSubCategoryType  = await ItemSubCategoryTypeModel.findByPk(id);
-            let result = await ItemSubCategoryTypeModel.destroy(itemSubCategoryType);
+
+            let result = await ItemSubCategoryTypeModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)

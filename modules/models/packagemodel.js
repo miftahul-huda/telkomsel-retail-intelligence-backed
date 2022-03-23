@@ -5,7 +5,9 @@ class PackageModel extends Model {
     { 
         super.init({
             package_name: DataTypes.STRING,
-            operator_id : DataTypes.INTEGER
+            operator_id : DataTypes.INTEGER,
+            sub_items: DataTypes.TEXT,
+            operator: DataTypes.STRING
         }, 
         { sequelize, modelName: 'package', tableName: 'package', force: force });
     }

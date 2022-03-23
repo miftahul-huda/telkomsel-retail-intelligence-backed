@@ -3,6 +3,7 @@ const { Sequelize, Model, DataTypes, QueryTypes } = require('sequelize');
 const { Op } = require("sequelize");
 const Initialization = require('../../initialization');
 const UploadFileModel = require('../models/uploadfilemodel');
+const FilePackageSubItemModel = require('../models/filepackagesubitemmodel');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -11,6 +12,18 @@ const sequelize = new Sequelize({
 
 class FilePackageItemLogic {
 
+    static async createFilePackageSubItem(subItem)
+    {
+        let promise = new Promise((resolve, reject) => {
+            FilePackageSubItemModel.create(subItem).then((newSubItem)=>{
+                resolve(newSubItem)
+            }).catch((err)=>{
+                reject(err);
+            })
+        })
+
+        return promise;
+    }
 
     static async create(filePackageItem)
     {
@@ -22,12 +35,25 @@ class FilePackageItemLogic {
                 filePackageItem.isTransfered = 0;
                 let newfilePackageItem = await FilePackageItemModel.create(filePackageItem);
                 console.log(newfilePackageItem);
+
+                if(filePackageItem.packageSubItems != null && filePackageItem.packageSubItems.length > 0)
+                {
+                    filePackageItem.packageSubItems.map(async (subItem)=>{
+                        subItem.id = null;
+                        subItem.packageItemId  = newfilePackageItem.id;
+                        console.log("subItem")
+                        console.log(subItem)
+                        await FilePackageItemLogic.createFilePackageSubItem(subItem);
+                    })
+                }
+
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newfilePackageItem;
                 return  result;
             }
             catch(error)
             {
+                console.log("Error FilePackageItemLogic.create")
                 console.log(error);
                 throw { success: false, message: '', error: error };
             }
@@ -114,8 +140,8 @@ class FilePackageItemLogic {
         console.log(id)
         if(result.success){
             try {
-                let filePackageItem = await FilePackageItemModel.update(filePackageItem, { where:  { id: id }  });
-                result.payload = filePackageItem;
+                let item = await FilePackageItemModel.update(filePackageItem, { where:  { id: id }  });
+                result.payload = item;
                 return  result;
             }
             catch(error)
@@ -157,8 +183,7 @@ class FilePackageItemLogic {
     static async delete(id)
     {
         try{
-            let filePackageItem  = await FilePackageItemModel.findByPk(id);
-            let result = await FilePackageItemModel.destroy(filePackageItem);
+            let result = await FilePackageItemModel.destroy({ where: { id: id } });
             return { success: true, payload: result }
         }
         catch (error)
@@ -170,8 +195,14 @@ class FilePackageItemLogic {
     static async deleteByUploadId(id)
     {
         try{
-
+            let packageItems = await FilePackageItemModel.findAll({ where: { upload_file_id: id }});
+            let packageItemIds = [];
+            packageItems.map((item)=>{
+                packageItemIds.push(item.id)
+            })
             let result = await FilePackageItemModel.destroy({ where: { upload_file_id: id }});
+            if(packageItemIds.length > 0)
+                await FilePackageSubItemModel.destroy({ where: { packageItemId: { [Op.in]: packageItemIds } } })
             return { success: true, payload: result }
         }
         catch (error)

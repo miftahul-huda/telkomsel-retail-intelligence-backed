@@ -102,6 +102,19 @@ class ApplicationLogic {
         }
     }
 
+    static async getByVersion(version)
+    {
+        try{
+            let app  = await ApplicationModel.findOne({where: {version: version}});
+
+            return { success: true, payload: app }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
     static async update(id,  app)
     {
         let result = this.successate(app);

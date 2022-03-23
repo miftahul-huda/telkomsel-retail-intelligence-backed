@@ -5,9 +5,11 @@ class StoreFrontItemModel extends Model {
     { 
         super.init({
             operator:  DataTypes.STRING,
+            operatorText: DataTypes.STRING,
             percentage: DataTypes.DECIMAL,
-            productHero: DataTypes.STRING,
             upload_file_id: DataTypes.INTEGER,
+            /*
+            productHero: DataTypes.STRING,
             gbmain: DataTypes.DECIMAL,
             gbmain_duration_days: DataTypes.INTEGER,
             gbnight: DataTypes.DECIMAL,
@@ -23,6 +25,7 @@ class StoreFrontItemModel extends Model {
             transferPrice: DataTypes.DECIMAL,
             category: DataTypes.STRING,
             campaignTheme: DataTypes.STRING,
+            */
             isTransfered: DataTypes.INTEGER
         }, 
         { sequelize, modelName: 'storefrontitem', tableName: 'storefrontitem', force: force });

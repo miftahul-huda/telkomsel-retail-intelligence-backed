@@ -1,5 +1,6 @@
 service: prod-retail-intelligence-api
 runtime: nodejs12
+instance_class: F4
 env: standard
 env_variables:
   PORT: "8080"

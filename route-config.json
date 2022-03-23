@@ -10,15 +10,19 @@
     { "path" :  "/operator", "router"  : "./routes/operator" },
     { "path" :  "/suboperator", "router"  : "./routes/suboperator" },
     { "path" :  "/package", "router"  : "./routes/package" },
+    { "path" :  "/packagename", "router"  : "./routes/packagename" },
     { "path" :  "/store", "router"  : "./routes/store" },
     { "path" :  "/uploadfile", "router"  : "./routes/uploadfile" },
     { "path" :  "/filepackageitem", "router"  : "./routes/filepackageitem" },
     { "path" :  "/filepackagesubitem", "router"  : "./routes/filepackagesubitem" },
     { "path" :  "/storefrontitem", "router"  : "./routes/storefrontitem" },
     { "path" :  "/log", "router"  : "./routes/log" },
+    { "path" :  "/ml", "router"  : "./routes/ml" },
     { "path" :  "/report", "router"  : "./routes/report" },
     { "path" :  "/application", "router"  : "./routes/applications" },
     { "path" :  "/itemsubcategory", "router"  : "./routes/itemsubcategory" },
     { "path" :  "/itemsubcategorytype", "router"  : "./routes/itemsubcategorytype" },
-    { "path" :  "/productcatalog", "router"  : "./routes/productcatalog" }
+    { "path" :  "/productcatalog", "router"  : "./routes/productcatalog" },
+    { "path" :  "/keyvalueitem", "router"  : "./routes/keyvalueitem" },
+    { "path" :  "/totalsales", "router"  : "./routes/totalsales" }
 ]

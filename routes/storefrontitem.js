@@ -97,7 +97,7 @@ router.post('/update-istransfered/:isTransfered', function (req, res){
 router.get('/delete/:id', function (req, res){
   let id = req.params.id;
 
-  StoreFrontItemLogic.delete(id, stroreFrontItem).then(function (result)
+  StoreFrontItemLogic.delete(id).then(function (result)
   {
     res.send(result);
   }).catch(function (err){
