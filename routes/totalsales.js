@@ -69,4 +69,15 @@ router.get('/get/:id', function (req, res){
     })
 })
 
+router.get('/file/:id', function (req, res){
+  let id = req.params.id;
+  TotalSalesLogic.findByFileId(id).then(function (totalSales)
+  {
+      res.send(totalSales);
+  }).catch(function (err){
+      console.log("error")
+      res.send(err);
+  })
+})
+
 module.exports = router;

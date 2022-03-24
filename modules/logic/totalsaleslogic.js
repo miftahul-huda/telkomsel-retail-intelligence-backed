@@ -90,6 +90,23 @@ class TotalSalesLogic {
 
     }
 
+    static async findByFileId(fileid)
+    {
+        try{
+            let totalsales  = await TotalSalesModel.findAll({
+                where: {
+                    upload_file_id : fileid
+                }
+            })
+            return { success: true, payload: totalsales }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+
     static async delete(id)
     {
         try{

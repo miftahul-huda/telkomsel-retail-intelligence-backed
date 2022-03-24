@@ -24,5 +24,6 @@
     { "path" :  "/itemsubcategorytype", "router"  : "./routes/itemsubcategorytype" },
     { "path" :  "/productcatalog", "router"  : "./routes/productcatalog" },
     { "path" :  "/keyvalueitem", "router"  : "./routes/keyvalueitem" },
-    { "path" :  "/totalsales", "router"  : "./routes/totalsales" }
+    { "path" :  "/totalsales", "router"  : "./routes/totalsales" },
+    { "path" :  "/etalaseitem", "router"  : "./routes/etalaseitem" }
 ]

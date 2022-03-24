@@ -263,7 +263,7 @@ class ReportLogic {
             "uploadfile left join " +
             "storefrontitem on " +
             "uploadfile.id = storefrontitem.upload_file_id " +
-            "where \"uploadfile\".\"imageCategory\" like 'storefront-before-after  and \"uploadfile\".\"beforeAfterType\" like 'before'' " +
+            "where \"uploadfile\".\"imageCategory\" like 'storefront-before-after  and \"uploadfile\".\"beforeAfterType\" like 'before' " +
             "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
             "group by uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
@@ -305,7 +305,7 @@ class ReportLogic {
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
             "count(totalsales.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
-            "filepackageitem on " +
+            "totalsales on " +
             "uploadfile.id = totalsales.upload_file_id " +
             "where \"uploadfile\".\"imageCategory\" like 'total-sales' " +
             "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
@@ -347,10 +347,10 @@ class ReportLogic {
 
             let sql = "select uploadfile.id, uploadfile.filename, " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
-            "count(etalase.upload_file_id) as \"totalItems\" from " +
+            "count(etalaseitem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
-            "filepackageitem on " +
-            "uploadfile.id = etalase.upload_file_id " +
+            "etalaseitem on " +
+            "uploadfile.id = etalaseitem.upload_file_id " +
             "where \"uploadfile\".\"imageCategory\" like 'etalase' " +
             "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
             "group by uploadfile.id, uploadfile.filename, " +
