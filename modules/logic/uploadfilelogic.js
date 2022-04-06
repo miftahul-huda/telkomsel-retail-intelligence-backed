@@ -33,8 +33,13 @@ class UploadFileLogic {
 
     static async create(uploadfile)
     {
+
         delete uploadfile.id;
         uploadfile.id = null;
+
+        console.log("Receiving uploadfile")
+        console.log(uploadfile)
+
         let result = this.validate(uploadfile);
         if(result.success){
             try {
@@ -45,6 +50,8 @@ class UploadFileLogic {
                 console.log("id")
                 console.log(newUploadFile.id)
                 console.log("================")
+
+
 
                 if(uploadfile.packageItems != null && uploadfile.packageItems.length > 0)
                 {
@@ -81,7 +88,7 @@ class UploadFileLogic {
                         item.upload_file_id  = newUploadFile.id;
                     })
                     let newTotalSales = await TotalSalesModel.bulkCreate(totalSales)
-                    newUploadFile.etalaseItems = newTotalSales
+                    newUploadFile.totalSales = newTotalSales
                 }
 
                 //newUploadFile = this.clear(uploadfile)
@@ -261,8 +268,41 @@ class UploadFileLogic {
 
     static validate(uploadfile)
     {
-        
-        return {success :  true, message: "Succesfull"}
+        let result = {success :  true, message: "Succesfull"};
+        if(uploadfile.imageCategory.indexOf("poster") > -1)
+        {
+            if(uploadfile.packageItems == null || uploadfile.packageItems.length == 0)
+            {
+                result = { success: false, message: 'Mohon isi item-item paket'  }
+            }
+        }
+
+        if(uploadfile.imageCategory.indexOf("storefront") > -1)
+        {
+            if(uploadfile.storeFrontItems == null || uploadfile.storeFrontItems.length == 0)
+            {
+                result = { success: false, message: 'Mohon isi item-item paket'  }
+            }
+        }
+
+        if(uploadfile.imageCategory.indexOf("etalase") > -1)
+        {
+            if(uploadfile.etalaseItems == null || uploadfile.etalaseItems.length == 0)
+            {
+                result = { success: false, message: 'Mohon isi item-item etalase'  }
+            }
+        }
+
+        if(uploadfile.imageCategory.indexOf("total-sales") > -1)
+        {
+            if(uploadfile.totalSales == null || uploadfile.totalSales.length == 0)
+            {
+                result = { success: false, message: 'Mohon isi item-item total penjualan'  }
+            }
+        }
+
+
+        return result;
     }
 }
 
