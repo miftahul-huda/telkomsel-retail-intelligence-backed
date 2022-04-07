@@ -14,10 +14,10 @@ class StoreLogic {
         try{
             let where = {};
             if(area != null)
-                where = { store_area: area }
+                where = {  store_area: { [Op.iLike] : area } }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where,
                 limit: 30
             });
@@ -29,7 +29,43 @@ class StoreLogic {
         }
     }
 
-    static async findAllArea(area)
+    static async findAllByCity(city)
+    {
+        try{
+            let where = {};
+            if(city != null)
+                where = {  store_city: { [Op.iLike] : city } }
+
+            let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                where: where,
+                limit: 30
+            });
+            return { success: true, payload: stores }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllCity()
+    {
+        try{
+
+            let cities  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_city')), 'city']]
+            });
+
+            return { success: true, payload: cities }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllArea()
     {
         try{
 
@@ -50,10 +86,29 @@ class StoreLogic {
         try{
             let where = {};
             if(area != null)
-                where = { store_area: area }
+                where = {  store_area: { [Op.iLike] : area } }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
+                where: where
+            });
+            return { success: true, payload: stores }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllNoLimitByCity(city)
+    {
+        try{
+            let where = {};
+            if(city != null)
+                where = {  store_city: { [Op.iLike] : city } }
+
+            let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where
             });
             return { success: true, payload: stores }
@@ -79,13 +134,48 @@ class StoreLogic {
                 where = {
                     [Op.and] : [
                         where,
-                        {store_area: area}   
+                        {store_area: { [Op.iLike] : area }}   
                     ]
                 }
             }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area'],
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
+                where: where,
+                limit: 30
+            });
+
+
+            return { success: true, payload: stores  }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findByKeywordByCity(keyword, city)
+    {
+        try{
+            let where = {
+                [Op.or] : [
+                    {store_name: { [Op.iLike] : '%' + keyword + '%' }},
+                    {storeid: { [Op.iLike] : '%' + keyword + '%' }}
+                ]
+            };
+
+            if(city != null)
+            {
+                where = {
+                    [Op.and] : [
+                        where,
+                        {store_city: { [Op.iLike] : city }}   
+                    ]
+                }
+            }
+
+            let stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where,
                 limit: 30
             });

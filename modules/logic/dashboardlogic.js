@@ -5,9 +5,12 @@ const { Op, QueryTypes } = require("sequelize");
 
 class ReportLogic {
     
-    static async getTotalUploadsByUploader(sequelize, uploader)
+    static async getMonitoringDashboardInfo(sequelize, startDate, endDate, area)
     {
         try{
+            let queryTotalUpload = `SELECT count(*) as totalUpload FROM uploadfile u `  +
+                                    `WHERE u.upload_date BETWEEN '${starDate}' AND '${endDate}'`;
+
             const result = await sequelize.query("select count(*) as total from uploadfile where uploaded_by_email like '" + uploader + "'", { type: QueryTypes.SELECT });
 
             return { success: true, payload: result};

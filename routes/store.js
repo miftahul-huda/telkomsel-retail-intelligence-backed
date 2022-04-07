@@ -108,6 +108,64 @@ router.get('/search/by-area/:keyword/:area', function (req, res){
 })
 
 
+//=============
+router.get('/city', function (req, res){
+
+  StoreLogic.findAllCity().then(function (cities)
+  {
+    console.log(cities);
+    res.send(cities);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
+router.get('/by-city/:city', function (req, res){
+
+  let city = req.params.city;
+  StoreLogic.findAllByCity(city).then(function (stores)
+  {
+    console.log(stores);
+    res.send(stores);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+router.get('/by-city/nolimit/:city', function (req, res){
+
+  let city = req.params.city;
+  StoreLogic.findAllNoLimitByCity(city).then(function (stores)
+  {
+    console.log(stores);
+    res.send(stores);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
+router.get('/search/by-city/:keyword/:city', function (req, res){
+  let keyword = req.params.keyword;
+  let city = req.params.city;
+  console.log("search:")
+  console.log(keyword)
+
+  StoreLogic.findByKeywordByCity(keyword, city).then(function (Stores)
+  {
+    res.send(Stores);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
+//==============
+
+
 router.get('/get/:id', function (req, res){
     let id = req.params.id;
   
