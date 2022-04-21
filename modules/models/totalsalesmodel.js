@@ -16,6 +16,7 @@ class TotalSalesModel extends Model {
             totalPenjualanVoucherFisikLow: DataTypes.DECIMAL,
             totalPenjualanVoucherFisikMid: DataTypes.DECIMAL,
             totalPenjualanVoucherFisikHigh: DataTypes.DECIMAL,
+            operator: DataTypes.STRING
 
         }, 
         { sequelize, modelName: 'totalsales', tableName: 'totalsales', force: force });
