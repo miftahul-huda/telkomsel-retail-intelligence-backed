@@ -4,7 +4,7 @@ class TotalSalesModel extends Model {
     static initialize(sequelize, force=false)
     { 
         super.init({
-            isiUlang: DataTypes.STRING,
+            isiUlang: DataTypes.DECIMAL,
             paketPalingBanyakDibeli: DataTypes.STRING,
             upload_file_id: DataTypes.INTEGER,
             totalRataPenjualan: DataTypes.DECIMAL,

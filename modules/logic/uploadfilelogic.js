@@ -29,7 +29,13 @@ class UploadFileLogic {
         })
     }
 
-
+    static getCurrentDate()
+    {
+        var date = new Date();
+        var dateString = date.getFullYear() + "-" + (date.getMonth()  + 1) + "-" + date.getDate();
+        dateString += " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        return dateString;
+    }
 
     static async create(uploadfile)
     {
@@ -44,6 +50,9 @@ class UploadFileLogic {
         if(result.success){
             try {
                 uploadfile.isTransfered = 0;
+                uploadfile.imageStatus = "uploaded"
+                //uploadfile.upload_date = this.getCurrentDate();
+
                 let newUploadFile = await UploadFileModel.create(uploadfile);
                 console.log("=======newUploadFile======")
                 console.log(newUploadFile);
@@ -206,7 +215,7 @@ class UploadFileLogic {
 
     static async update(id,  uploadfile)
     {
-        let result = this.validate(uploadfile);
+        let result = this.validateUpdate(uploadfile);
         console.log(id)
         if(result.success){
             try {
@@ -301,6 +310,13 @@ class UploadFileLogic {
             }
         }
 
+
+        return result;
+    }
+
+    static validateUpdate(uploadfile)
+    {
+        let result = {success :  true, message: "Succesfull"};
 
         return result;
     }

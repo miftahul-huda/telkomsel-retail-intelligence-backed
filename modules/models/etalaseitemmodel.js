@@ -8,7 +8,10 @@ class EtalaseItemModel extends Model {
             operatorText: DataTypes.STRING,
             percentage: DataTypes.DECIMAL,
             upload_file_id: DataTypes.INTEGER,
-            isTransfered: DataTypes.INTEGER
+            isTransfered: DataTypes.INTEGER,
+            availabiity_score: DataTypes.INTEGER,
+            visibility_score: DataTypes.INTEGER,
+            visibility_percentage: DataTypes.DECIMAL
         }, 
         { sequelize, modelName: 'etalaseitem', tableName: 'etalaseitem', force: force });
     }
