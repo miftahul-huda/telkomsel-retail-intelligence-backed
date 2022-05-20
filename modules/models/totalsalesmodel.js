@@ -8,6 +8,8 @@ class TotalSalesModel extends Model {
             paketPalingBanyakDibeli: DataTypes.STRING,
             upload_file_id: DataTypes.INTEGER,
             totalRataPenjualan: DataTypes.DECIMAL,
+            totalPenjualanPerdana: DataTypes.DECIMAL,
+            totalPenjualanVoucherFisik: DataTypes.DECIMAL,
             totalPenjualanKartuPerdanaMicro: DataTypes.DECIMAL,
             totalPenjualanKartuPerdanaLow: DataTypes.DECIMAL,
             totalPenjualanKartuPerdanaMid: DataTypes.DECIMAL,
