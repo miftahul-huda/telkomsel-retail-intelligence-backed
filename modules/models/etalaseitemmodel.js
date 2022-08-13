@@ -11,7 +11,14 @@ class EtalaseItemModel extends Model {
             isTransfered: DataTypes.INTEGER,
             availability_score: DataTypes.INTEGER,
             visibility_score: DataTypes.INTEGER,
-            visibility_percentage: DataTypes.DECIMAL
+            visibility_percentage: DataTypes.DECIMAL,
+            originalOperator: DataTypes.STRING,
+            originalOperatorText: DataTypes.STRING,
+            original_availability_percentage: DataTypes.DECIMAL,
+            original_visibility_percentage: DataTypes.DECIMAL,
+            original_availability_score: DataTypes.DECIMAL,
+            original_visibility_score: DataTypes.DECIMAL,
+
         }, 
         { sequelize, modelName: 'etalaseitem', tableName: 'etalaseitem', force: force });
     }

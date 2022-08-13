@@ -22,6 +22,7 @@ router.get('/:operatorcode', function (req, res){
 })
 
 
+
 router.get('/get/:id', function (req, res){
     let id = req.params.id;
   

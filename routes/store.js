@@ -124,9 +124,11 @@ router.get('/city', function (req, res){
 router.get('/by-city/:city', function (req, res){
 
   let city = req.params.city;
+
+  //city = null;
   StoreLogic.findAllByCity(city).then(function (stores)
   {
-    console.log(stores);
+    //console.log(stores);
     res.send(stores);
   }).catch(function (err){
     console.log("error")
@@ -138,9 +140,10 @@ router.get('/by-city/:city', function (req, res){
 router.get('/by-city/nolimit/:city', function (req, res){
 
   let city = req.params.city;
+  //city = null;
   StoreLogic.findAllNoLimitByCity(city).then(function (stores)
   {
-    console.log(stores);
+    //console.log(stores);
     res.send(stores);
   }).catch(function (err){
     console.log("error")
@@ -151,8 +154,9 @@ router.get('/by-city/nolimit/:city', function (req, res){
 router.get('/search/by-city/:keyword/:city', function (req, res){
   let keyword = req.params.keyword;
   let city = req.params.city;
-  console.log("search:")
-  console.log(keyword)
+  //city = null;
+  //console.log("search:")
+  //console.log(keyword)
 
   StoreLogic.findByKeywordByCity(keyword, city).then(function (Stores)
   {
@@ -162,6 +166,55 @@ router.get('/search/by-city/:keyword/:city', function (req, res){
     res.send(err);
   })
 })
+
+
+router.get('/search/by-user/:keyword/:user', function (req, res){
+  let keyword = req.params.keyword;
+  let city = req.params.city;
+  //city = null;
+  //console.log("search:")
+  //console.log(keyword)
+
+  StoreLogic.findByKeywordByCity(keyword, city).then(function (Stores)
+  {
+    res.send(Stores);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
+router.get("/get-generic/:username/:sfcode", function (req, res){
+  
+  let username = req.params.username;
+  let sfcode = req.params.sfcode;
+
+  StoreLogic.findByUserOrSFCode(username, sfcode).then(function (Stores)
+  {
+    res.send(Stores);
+  }).catch(function (err){
+    console.log("error /get-generic/:username/:sfcode")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+router.get("/get-generic/search/:username/:sfcode/:keyword", function (req, res){
+  let username = req.params.username;
+  let sfcode = req.params.sfcode;
+  let keyword = req.params.keyword;
+
+  StoreLogic.findByUserOrSFCodeAndKeyword(username, sfcode, keyword).then(function (Stores)
+  {
+    res.send(Stores);
+  }).catch(function (err){
+    console.log("error /get-generic/search/:username/:sfcode/:keyword")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+
 
 //==============
 
@@ -180,8 +233,8 @@ router.get('/get/:id', function (req, res){
 
 router.get('/search/:keyword', function (req, res){
     let keyword = req.params.keyword;
-    console.log("search:")
-    console.log(keyword)
+    //console.log("search:")
+    //console.log(keyword)
   
     StoreLogic.findByKeyword(keyword).then(function (Stores)
     {

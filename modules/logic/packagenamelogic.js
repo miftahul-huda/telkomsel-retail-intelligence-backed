@@ -13,11 +13,17 @@ class PackageNameLogic {
     {
         console.log(operator)
         try{
-            let packages  = await PackageNameModel.findAll({
+
+            let where = {
                 where: {
                     operator : operator
                 }
-            })
+            };
+
+            if(operator == "*")
+                where = {};
+            
+            let packages  = await PackageNameModel.findAll(where)
             return { success: true, payload: packages }
         }
         catch (error)

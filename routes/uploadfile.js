@@ -6,7 +6,6 @@ const UploadFileLogic = require('../modules/logic/uploadfilelogic')
 
 router.post('/create', function (req, res){
     let uploadfile = req.body;
-    console.log(uploadfile)
 
     UploadFileLogic.create(uploadfile).then(function (saveduploadfile)
     {
@@ -50,6 +49,18 @@ router.get('/user/:email', function (req, res){
         console.log("error")
         res.send(err);
     })
+})
+
+
+router.get('/total-upload/:email', function (req, res){
+  let email = req.params.email;
+  UploadFileLogic.getTotalByEmail(email).then(function (uploadfiles)
+  {
+      res.send(uploadfiles);
+  }).catch(function (err){
+      console.log("error")
+      res.send(err);
+  })
 })
 
 

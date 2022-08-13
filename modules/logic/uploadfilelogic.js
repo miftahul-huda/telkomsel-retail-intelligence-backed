@@ -5,6 +5,7 @@ const FilePackageItemLogic = require('./filepackageitemlogic');
 const StoreFrontItemLogic = require('./storefrontitemlogic')
 const TotalSalesModel = require('../models/totalsalesmodel')
 const EtalaseItemModel = require('../models/etalaseitemmodel')
+const PosterItemModel = require('../models/posteritemmodel')
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -19,6 +20,20 @@ class UploadFileLogic {
             let newItem = await FilePackageItemLogic.create(item);
             
         })
+    }
+
+    static async getTotalByEmail(email)
+    {
+        try
+        {
+            let total = await UploadFileModel.count({ where: { uploaded_by_email : { [Op.iLike] : "'" + email + "'"} } });
+            return { success: true, payload: total};
+        }
+        catch(err)
+        {
+            throw {success: false, error: err, message: err.message}
+        }
+        
     }
 
 
@@ -43,8 +58,8 @@ class UploadFileLogic {
         delete uploadfile.id;
         uploadfile.id = null;
 
-        console.log("Receiving uploadfile")
-        console.log(uploadfile)
+        //console.log("Receiving uploadfile")
+        //console.log(uploadfile)
 
         let result = this.validate(uploadfile);
         if(result.success){
@@ -54,11 +69,11 @@ class UploadFileLogic {
                 //uploadfile.upload_date = this.getCurrentDate();
 
                 let newUploadFile = await UploadFileModel.create(uploadfile);
-                console.log("=======newUploadFile======")
-                console.log(newUploadFile);
-                console.log("id")
-                console.log(newUploadFile.id)
-                console.log("================")
+                //console.log("=======newUploadFile======")
+                //console.log(newUploadFile);
+                //console.log("id")
+                //console.log(newUploadFile.id)
+                //console.log("================")
 
 
 
@@ -98,6 +113,21 @@ class UploadFileLogic {
                     })
                     let newTotalSales = await TotalSalesModel.bulkCreate(totalSales)
                     newUploadFile.totalSales = newTotalSales
+                }
+
+
+                if(uploadfile.posterItems != null)
+                {
+                    let posterItems = uploadfile.posterItems;
+                    posterItems.forEach((item)=>{
+                        delete item.id;
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    let newposterItems = await PosterItemModel.bulkCreate(posterItems)
+                    newUploadFile.posterItems = newposterItems
+
+                    //console.log("new poster items")
+                    //console.log(newposterItems)
                 }
 
                 //newUploadFile = this.clear(uploadfile)
@@ -216,7 +246,7 @@ class UploadFileLogic {
     static async update(id,  uploadfile)
     {
         let result = this.validateUpdate(uploadfile);
-        console.log(id)
+        //console.log(id)
         if(result.success){
             try {
                 let newUploadFile = await UploadFileModel.update(uploadfile, { where:  { id: id }  });
@@ -244,7 +274,7 @@ class UploadFileLogic {
             let sIds = ids.split(',');
             for(var i = 0; i < sIds.length; i++)
                 sIds[i] = parseInt(sIds[i])
-            console.log(sIds)
+            //console.log(sIds)
 
             let newUploadFile = await UploadFileModel.update({ isTransfered : isTransfered }, { where:  { id: sIds }});
             
@@ -280,7 +310,7 @@ class UploadFileLogic {
         let result = {success :  true, message: "Succesfull"};
         if(uploadfile.imageCategory.indexOf("poster") > -1)
         {
-            if(uploadfile.packageItems == null || uploadfile.packageItems.length == 0)
+            if(uploadfile.posterType == "product" && (uploadfile.posterItems == null || uploadfile.posterItems.length == 0))
             {
                 result = { success: false, message: 'Mohon isi item-item paket'  }
             }

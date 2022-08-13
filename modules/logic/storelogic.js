@@ -1,4 +1,6 @@
 const StoreModel  = require( '../models/storemodel')
+const StoreUserModel  = require( '../models/storeusermodel')
+
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 
@@ -19,7 +21,7 @@ class StoreLogic {
             let stores  = await StoreModel.findAll({
                 attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where,
-                limit: 30
+                limit: 1
             });
             return { success: true, payload: stores }
         }
@@ -31,15 +33,22 @@ class StoreLogic {
 
     static async findAllByCity(city)
     {
+        console.log("Store by city")
         try{
             let where = {};
+            let limit = 1;
+
             if(city != null)
+            {
                 where = {  store_city: { [Op.iLike] : city } }
+                limit = 1;
+
+            }
 
             let stores  = await StoreModel.findAll({
                 attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where,
-                limit: 30
+                limit: limit
             });
             return { success: true, payload: stores }
         }
@@ -142,7 +151,7 @@ class StoreLogic {
             let stores  = await StoreModel.findAll({
                 attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where,
-                limit: 30
+                limit: 1
             });
 
 
@@ -177,7 +186,7 @@ class StoreLogic {
             let stores  = await StoreModel.findAll({
                 attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where,
-                limit: 30
+                limit: 3
             });
 
 
@@ -244,11 +253,71 @@ class StoreLogic {
 
     static validateCreate(store)
     {
+        
         if(store.store_name == null || store.store_name.trim().length == 0)
-            return { success: false, message: 'Please enter store name' }
-
+            return { success: false, message: 'Masukkan nama outlet' }
+        if(store.storeid == null || store.storeid.trim().length == 0)
+            return { success: false, message: 'Masukkan  ID outlet' }
+        if(store.store_city == null || store.store_city.trim().length == 0)
+            return { success: false, message: 'Masukkan kota/kabupaten outlet' }
+        if(store.store_area == null || store.store_area.trim().length == 0)
+            return { success: false, message: 'Masukkan areea outlet' }
         return { success: true, message: '' }
     }
+
+    static async findByUserOrSFCode(username, sfcode)
+    {
+        try{
+
+            let cond1 = { username: {[Op.iLike] : '%' + username + '%' } };
+            let cond2 = { sfcode: {[Op.iLike] : '%' + sfcode + '%' } };
+            let cond = {
+                [Op.or]: [
+                    cond1, cond2
+                ]
+            }
+            let stores  = await StoreUserModel.findAll({
+                where: cond
+            });
+
+            let storeids = [];
+            stores.map((store)=>{
+                storeids.push(store.storeid);
+            })
+
+            stores = await StoreModel.findAll({ where: { storeid : {  [Op.in]: storeids } }})
+
+            return { success: true, payload: stores }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findByUserOrSFCodeAndKeyword(username, sfcode, keyword)
+    {
+        try{
+
+            let cond1 = { username: {[Op.iLike] : '%' + username + '%' } };
+            let cond2 = { sfcode: {[Op.iLike] : '%' + sfcode + '%' } };
+            let cond = {
+                [Op.or]: [
+                    cond1, cond2
+                ]
+            }
+            let stores  = await StoreUserModel.findAll({
+                where: cond
+            });
+            return { success: true, payload: stores }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+
 
 }
 

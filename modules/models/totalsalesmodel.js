@@ -6,6 +6,8 @@ class TotalSalesModel extends Model {
         super.init({
             isiUlang: DataTypes.DECIMAL,
             paketPalingBanyakDibeli: DataTypes.STRING,
+            paketPalingBanyakDibeliNama: DataTypes.STRING,
+            paketPalingBanyakDibeliBesaran: DataTypes.DECIMAL,
             upload_file_id: DataTypes.INTEGER,
             totalRataPenjualan: DataTypes.DECIMAL,
             totalPenjualanPerdana: DataTypes.DECIMAL,

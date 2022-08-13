@@ -46,10 +46,14 @@ class UploadFileModel extends Model {
             posterTypeText: DataTypes.STRING,
             areaPromotion: DataTypes.STRING,
             areaPromotionText: DataTypes.STRING,
+            posterCategory: DataTypes.STRING,
+            posterCategoryText: DataTypes.STRING,
             imageCategory: DataTypes.STRING,
             imageStatus: DataTypes.STRING,
             operatorDominant: DataTypes.STRING,
             operatorDominantText: DataTypes.STRING,
+            originalOperatorDominant: DataTypes.STRING,
+            originalOperatorDominantText: DataTypes.STRING,
             posterTheme: DataTypes.STRING,
 
             //Information for Store front

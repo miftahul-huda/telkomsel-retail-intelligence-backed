@@ -18,8 +18,12 @@ const ProductCatalogModel  = require( './modules/models/productcatalogmodel')
 const KeyValueItemModel  = require( './modules/models/keyvalueitemmodel')
 const TotalSalesModel  = require( './modules/models/totalsalesmodel')
 const EtalaseItemModel  = require( './modules/models/etalaseitemmodel')
+const StoreUserModel  = require( './modules/models/storeusermodel')
+const PosterItem  = require( './modules/models/posteritemmodel')
+
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
+const PosterItemModel = require('./modules/models/posteritemmodel')
 
 
 
@@ -82,6 +86,10 @@ class Initialization {
         TotalSalesModel.initialize(sequelize, force);
 
         EtalaseItemModel.initialize(sequelize, force);
+
+        StoreUserModel.initialize(sequelize, force);
+
+        PosterItemModel.initialize(sequelize, force);
 
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
