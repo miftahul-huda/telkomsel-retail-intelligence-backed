@@ -10,6 +10,7 @@ class EtalaseItemModel extends Model {
             upload_file_id: DataTypes.INTEGER,
             isTransfered: DataTypes.INTEGER,
             availability_score: DataTypes.INTEGER,
+            availability_percentage: DataTypes.DECIMAL,
             visibility_score: DataTypes.INTEGER,
             visibility_percentage: DataTypes.DECIMAL,
             originalOperator: DataTypes.STRING,
