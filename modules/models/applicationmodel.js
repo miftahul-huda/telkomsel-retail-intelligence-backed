@@ -9,6 +9,8 @@ class ApplicationModel extends Model {
             version: DataTypes.STRING,
             appMessage: DataTypes.STRING,
             appConfig: DataTypes.STRING,
+            isActive: DataTypes.INTEGER,
+            downloadMessage: DataTypes.TEXT
         }, 
         { sequelize, modelName: 'application', tableName: 'application', force: force });
     }

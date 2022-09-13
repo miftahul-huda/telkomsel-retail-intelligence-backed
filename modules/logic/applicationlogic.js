@@ -115,6 +115,21 @@ class ApplicationLogic {
         }
     }
 
+    static async getActiveApplication()
+    {
+        try{
+            let app  = await ApplicationModel.findOne({where: {isActive: 1}});
+            if(app != null)
+                return { success: true, payload: app }
+            else 
+                return { success: false, error: {}, message: "No active application" }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
     static async update(id,  app)
     {
         let result = this.successate(app);

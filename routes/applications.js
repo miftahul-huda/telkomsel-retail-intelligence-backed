@@ -74,6 +74,17 @@ router.get('/get-by-version/:version', function (req, res){
   })
 })
 
+router.get('/get-active-app', function (req, res){
+
+  ApplicationLogic.getActiveApplication().then(function (application)
+  {
+    res.send(application);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
 router.post('/update/:id', function (req, res){
   let application = req.body;
   let id = req.params.id;
