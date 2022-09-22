@@ -18,7 +18,6 @@
     { "path" :  "/filepackagesubitem", "router"  : "./routes/filepackagesubitem" },
     { "path" :  "/storefrontitem", "router"  : "./routes/storefrontitem" },
     { "path" :  "/log", "router"  : "./routes/log" },
-    { "path" :  "/ml", "router"  : "./routes/ml" },
     { "path" :  "/report", "router"  : "./routes/report" },
     { "path" :  "/application", "router"  : "./routes/applications" },
     { "path" :  "/itemsubcategory", "router"  : "./routes/itemsubcategory" },
@@ -27,5 +26,7 @@
     { "path" :  "/keyvalueitem", "router"  : "./routes/keyvalueitem" },
     { "path" :  "/totalsales", "router"  : "./routes/totalsales" },
     { "path" :  "/etalaseitem", "router"  : "./routes/etalaseitem" },
-    { "path" :  "/posteritem", "router"  : "./routes/posteritem" }
+    { "path" :  "/posteritem", "router"  : "./routes/posteritem" },
+    { "path" :  "/notification", "router"  : "./routes/notification" }
+
 ]

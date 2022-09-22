@@ -368,6 +368,125 @@ class ReportLogic {
             return {success: false, error: err, message: err.message}
         }
     }
+
+    static async getCompletenessReportByUsernameAndTime(sequelize, username, startdate, enddate)
+    {
+        try
+        {
+            let query = 
+            "select A.storeid, A.store_name, " +  
+            "    sum(A.total_poster) as total_poster,  " +  
+            "    sum(A.total_storefront) as total_storefront, " +  
+            "    sum(A.total_etalase) as total_etalase, " +  
+            "    sum(A.total_totalsales) as total_totalsales " +  
+            "from  " +  
+            "(	 " +  
+            "    select su.storeid, su.store_name, " +  
+            "       case  " +  
+            "           when u.\"imageCategory\" like 'poster' then count(u.*) " +  
+            "        end " +  
+            "        as total_poster, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'storefront' then count(u.*) " +  
+            "        end " +  
+            "        as total_storefront, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'etalase' then count(u.*) " +  
+            "        end " +  
+            "        as total_etalase, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'total-sales' then count(u.*) " +  
+            "        end " +  
+            "        as total_totalsales " +  
+
+            "    from \"store_user\" su " +  
+            "    left join  " +  
+            "        ( " +
+            "            select *  " +  
+            "            from \"uploadfile\"  " +  
+            "            where  " +  
+            "                \"upload_date\" between '" + startdate + "' and '" + enddate + "' " +  
+            "        ) u  " +  
+            "        on su.storeid = u.store_id " +  
+            "        where su.username like '" + username + "' " +  
+            "        group by su.storeid, su.store_name, u.\"imageCategory\" " +  
+            ") A " +  
+            "group by A.storeid, A.store_name ";
+
+            console.log("==================")
+            console.log(query)
+
+            const result = await sequelize.query(query, { type: QueryTypes.SELECT });
+            return { success: true, payload: result};
+
+        }
+        catch(e){
+            console.log(e)
+            throw  { success: false, error: e};
+        }    
+    }
+
+    static async getCompletenessReportByTime(sequelize, startdate, enddate)
+    {
+        try
+        {
+            let query = 
+            "select A.storeid, A.store_name, A.username, " +  
+            "    sum(A.total_poster) as total_poster,  " +  
+            "    sum(A.total_storefront) as total_storefront, " +  
+            "    sum(A.total_etalase) as total_etalase, " +  
+            "    sum(A.total_totalsales) as total_totalsales " +  
+            "from  " +  
+            "(	 " +  
+            "    select su.storeid, su.store_name, su.username, " +  
+            "       case  " +  
+            "           when u.\"imageCategory\" like 'poster' then count(u.*) " +  
+            "        end " +  
+            "        as total_poster, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'storefront' then count(u.*) " +  
+            "        end " +  
+            "        as total_storefront, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'etalase' then count(u.*) " +  
+            "        end " +  
+            "        as total_etalase, " +  
+
+            "        case  " +  
+            "            when u.\"imageCategory\" like 'total-sales' then count(u.*) " +  
+            "        end " +  
+            "        as total_totalsales " +  
+
+            "    from \"store_user\" su " +  
+            "    left join  " +  
+            "        ( " +
+            "            select *  " +  
+            "            from \"uploadfile\"  " +  
+            "            where  " +  
+            "                \"upload_date\" between '" + startdate + "' and '" + enddate + "' " +  
+            "        ) u  " +  
+            "        on su.storeid = u.store_id " +  
+            "        group by su.storeid, su.store_name, su.username, u.\"imageCategory\" " +  
+            ") A " +  
+            "group by A.storeid, A.store_name, A.username ";
+
+            //console.log("==================")
+            //console.log(query)
+
+            const result = await sequelize.query(query, { type: QueryTypes.SELECT });
+            return { success: true, payload: result};
+
+        }
+        catch(e){
+            console.log(e)
+            throw  { success: false, error: e};
+        }    
+    }
 }
 
 module.exports = ReportLogic;

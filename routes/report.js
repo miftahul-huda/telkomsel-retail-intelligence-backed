@@ -151,6 +151,33 @@ router.post('/etalase/byuploader/:uploader/:offset/:limit', function (req, res){
         res.send(err);
     })
 })
+
+router.get("/completeness/:username", function(req,res) {
+    let username  = req.params.username
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getCompletenessReportByUsernameAndTime(Initialization.getSequelize(), username, startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /completeness/:username " + username + ", startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
+
+router.get("/completeness", function(req,res) {
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getCompletenessReportByTime(Initialization.getSequelize(), startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /completeness, startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
   
 
 module.exports = router;
