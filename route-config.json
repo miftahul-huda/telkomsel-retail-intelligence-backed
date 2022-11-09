@@ -27,6 +27,7 @@
     { "path" :  "/totalsales", "router"  : "./routes/totalsales" },
     { "path" :  "/etalaseitem", "router"  : "./routes/etalaseitem" },
     { "path" :  "/posteritem", "router"  : "./routes/posteritem" },
-    { "path" :  "/notification", "router"  : "./routes/notification" }
+    { "path" :  "/notification", "router"  : "./routes/notification" },
+    { "path" :  "/currentcycle", "router"  : "./routes/currentcycle" }
 
 ]

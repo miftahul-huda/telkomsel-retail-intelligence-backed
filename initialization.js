@@ -22,6 +22,7 @@ const StoreUserModel  = require( './modules/models/storeusermodel')
 const PosterItem  = require( './modules/models/posteritemmodel')
 const NotificationModel = require("./modules/models/notificationmodel")
 const CurrentCycleModel = require("./modules/models/currentcyclemodel")
+const OutletScoreModel = require("./modules/models/outletscoremodel")
 
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
@@ -96,6 +97,8 @@ class Initialization {
         NotificationModel.initialize(sequelize, force);
 
         CurrentCycleModel.initialize(sequelize, force);
+
+        OutletScoreModel.initialize(sequelize, force);
 
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )

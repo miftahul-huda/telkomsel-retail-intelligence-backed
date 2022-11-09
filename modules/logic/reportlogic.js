@@ -409,6 +409,7 @@ class ReportLogic {
             "            from \"uploadfile\"  " +  
             "            where  " +  
             "                \"upload_date\" between '" + startdate + "' and '" + enddate + "' " +  
+            "               and \"uploaded_by_email\" like '" + username + "'" + 
             "        ) u  " +  
             "        on su.storeid = u.store_id " +  
             "        where su.username like '" + username + "' " +  

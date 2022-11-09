@@ -27,7 +27,7 @@ class NotificationLogic
 
             let ands = { [Op.and]: [
                 { username: { [Op.iLike]: username }},
-                { readers: { [Op.iLike]: "%" + username + "%" }}
+                {  [Op.or] : [{ readers: null}, { readers: "" }]}
             ] }
             NotificationModel.findAll({where: ands }).then((notifications)=>{
                 resolve({ success: true, payload: notifications })
@@ -71,7 +71,7 @@ class NotificationLogic
                         let items = report.payload;
                         let notifications = [];
                         let usernames = []
-                        
+
                         items.map(async (item)=>{
     
                             if(item.total_poster == null || item.total_storefront == null || item.total_etalase == null || item.total_totalsales == null)

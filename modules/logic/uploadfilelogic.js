@@ -5,7 +5,8 @@ const FilePackageItemLogic = require('./filepackageitemlogic');
 const StoreFrontItemLogic = require('./storefrontitemlogic')
 const TotalSalesModel = require('../models/totalsalesmodel')
 const EtalaseItemModel = require('../models/etalaseitemmodel')
-const PosterItemModel = require('../models/posteritemmodel')
+const PosterItemModel = require('../models/posteritemmodel');
+const OutletScoreModel = require('../models/outletscoremodel');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -125,6 +126,20 @@ class UploadFileLogic {
                     })
                     let newposterItems = await PosterItemModel.bulkCreate(posterItems)
                     newUploadFile.posterItems = newposterItems
+
+                    //console.log("new poster items")
+                    //console.log(newposterItems)
+                }
+
+                if(uploadfile.outletScores != null)
+                {
+                    let outletScores = uploadfile.outletScores;
+                    outletScores.forEach((item)=>{
+                        delete item.id;
+                        item.upload_file_id  = newUploadFile.id;
+                    })
+                    let newOutletScores = await OutletScoreModel.bulkCreate(outletScores)
+                    newUploadFile.outletScores = outletScores
 
                     //console.log("new poster items")
                     //console.log(newposterItems)
