@@ -16,7 +16,6 @@ const writeFilePromise = (file, data) => {
 
 /* POST applications listing. */
 router.post('/', function (req, res, next) {
-    console.log("fuck")
     let file = req.body;
     console.log(file);
     let base64Data  =   file.content.replace(/^data:image\/png;base64,/, "");
