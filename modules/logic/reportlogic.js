@@ -378,7 +378,8 @@ class ReportLogic {
 
             let query = `
             select 
-            A.storeid, A.store_name,     
+            A.storeid, A.store_name,   
+            sum(A.total_poster) as total_poster,   
             sum(A.total_poster_telkomsel) as total_poster_telkomsel,    
             sum(A.total_poster_competitor) as total_poster_competitor,      
             sum(A.total_storefront) as total_storefront,     
@@ -386,6 +387,7 @@ class ReportLogic {
             sum(A.total_totalsales) as total_totalsales from  
             (         
                 select su.storeid, su.store_name,        
+                case when u."imageCategory" like 'poster' then count(u.*) end as total_poster,
                 case when u."imageCategory" like 'poster' and u."operator" like 'telkomsel' then count(u.*) end as total_poster_telkomsel,
                 case when u."imageCategory" like 'poster' and u."operator" not like 'telkomsel' then count(u.*) end as total_poster_competitor,
                 case when u."imageCategory" like 'storefront' then count(u.*) end as total_storefront,         
@@ -501,6 +503,11 @@ class ReportLogic {
         rows.map((row)=>{
             row = ReportLogic.setZero(row);
             let complete = true;
+            if(row.total_poster == 0)
+            {
+                complete = false;
+            }
+
             if(row.total_poster_telkomsel == 0)
             {
                 complete = false;
