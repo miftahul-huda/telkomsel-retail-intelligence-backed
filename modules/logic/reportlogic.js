@@ -484,6 +484,8 @@ class ReportLogic {
 
     static setZero(row)
     {
+        if(row.total_poster == null)
+            row.total_poster = 0;
         if(row.total_poster_telkomsel == null)
             row.total_poster_telkomsel = 0;
         if(row.total_poster_competitor == null)
