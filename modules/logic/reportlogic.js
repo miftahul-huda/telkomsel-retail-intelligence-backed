@@ -373,54 +373,44 @@ class ReportLogic {
     {
         try
         {
-            let query = 
-            "select A.storeid, A.store_name, " +  
-            "    sum(A.total_poster) as total_poster,  " +  
-            "    sum(A.total_storefront) as total_storefront, " +  
-            "    sum(A.total_etalase) as total_etalase, " +  
-            "    sum(A.total_totalsales) as total_totalsales " +  
-            "from  " +  
-            "(	 " +  
-            "    select su.storeid, su.store_name, " +  
-            "       case  " +  
-            "           when u.\"imageCategory\" like 'poster' then count(u.*) " +  
-            "        end " +  
-            "        as total_poster, " +  
 
-            "        case  " +  
-            "            when u.\"imageCategory\" like 'storefront' then count(u.*) " +  
-            "        end " +  
-            "        as total_storefront, " +  
 
-            "        case  " +  
-            "            when u.\"imageCategory\" like 'etalase' then count(u.*) " +  
-            "        end " +  
-            "        as total_etalase, " +  
 
-            "        case  " +  
-            "            when u.\"imageCategory\" like 'total-sales' then count(u.*) " +  
-            "        end " +  
-            "        as total_totalsales " +  
+            let query = `
+            select 
+            A.storeid, A.store_name,     
+            sum(A.total_poster_telkomsel) as total_poster_telkomsel,    
+            sum(A.total_poster_competitor) as total_poster_competitor,      
+            sum(A.total_storefront) as total_storefront,     
+            sum(A.total_etalase) as total_etalase,     
+            sum(A.total_totalsales) as total_totalsales from  
+            (         
+                select su.storeid, su.store_name,        
+                case when u."imageCategory" like 'poster' and u."operator" like 'telkomsel' then count(u.*) end as total_poster_telkomsel,
+                case when u."imageCategory" like 'poster' and u."operator" not like 'telkomsel' then count(u.*) end as total_poster_competitor,
+                case when u."imageCategory" like 'storefront' then count(u.*) end as total_storefront,         
+                case when u."imageCategory" like 'etalase' then count(u.*) end as total_etalase,         
+                case when u."imageCategory" like 'total-sales' then count(u.*) end as total_totalsales     
+                from "store_user" su     
+                left join          (             
+                    select *              
+                    from "uploadfile"             
+                    where                 
+                    "upload_date" between '${startdate}' and '${enddate}'                
+                    and "uploaded_by_email" like '${username}'        
+                ) u          
+                on su.storeid = u.store_id        
+                where su.username like '${username}'         
+                group by su.storeid, su.store_name, u."imageCategory" , u."operator"
+            ) A group by A.storeid, A.store_name`;
 
-            "    from \"store_user\" su " +  
-            "    left join  " +  
-            "        ( " +
-            "            select *  " +  
-            "            from \"uploadfile\"  " +  
-            "            where  " +  
-            "                \"upload_date\" between '" + startdate + "' and '" + enddate + "' " +  
-            "               and \"uploaded_by_email\" like '" + username + "'" + 
-            "        ) u  " +  
-            "        on su.storeid = u.store_id " +  
-            "        where su.username like '" + username + "' " +  
-            "        group by su.storeid, su.store_name, u.\"imageCategory\" " +  
-            ") A " +  
-            "group by A.storeid, A.store_name ";
-
+                        
             console.log("==================")
             console.log(query)
 
-            const result = await sequelize.query(query, { type: QueryTypes.SELECT });
+            let result = await sequelize.query(query, { type: QueryTypes.SELECT });
+            result = ReportLogic.setStatus(result);
+
             return { success: true, payload: result};
 
         }
@@ -478,6 +468,7 @@ class ReportLogic {
 
             //console.log("==================")
             //console.log(query)
+            
 
             const result = await sequelize.query(query, { type: QueryTypes.SELECT });
             return { success: true, payload: result};
@@ -487,6 +478,55 @@ class ReportLogic {
             console.log(e)
             throw  { success: false, error: e};
         }    
+    }
+
+    static setZero(row)
+    {
+        if(row.total_poster_telkomsel == null)
+            row.total_poster_telkomsel = 0;
+        if(row.total_poster_competitor == null)
+            row.total_poster_competitor = 0;
+        if(row.total_storefront == null)
+            row.total_storefront = 0;
+        if(row.total_etalase == null)
+            row.total_etalase = 0;   
+        if(row.total_totalsales == null)
+            row.total_totalsales = 0;    
+        
+        return row;
+    }
+
+    static setStatus(rows)
+    {
+        rows.map((row)=>{
+            row = ReportLogic.setZero(row);
+            let complete = true;
+            if(row.total_poster_telkomsel == 0)
+            {
+                complete = false;
+            }
+
+            if(row.total_poster_competitor == 0)
+            {
+                complete = false;
+            }
+            if(row.total_storefront == 0)
+            {
+                complete = false;
+            }
+            if(row.total_etalase == 0)
+            {
+                complete = false;
+            }
+            if(row.total_totalsales == 0)
+            {
+                complete = false;
+            }
+
+            row.complete = complete;
+        })
+
+        return rows;
     }
 }
 
