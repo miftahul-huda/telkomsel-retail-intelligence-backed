@@ -2,7 +2,6 @@ const OperatorModel  = require( '../models/operatormodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op, QueryTypes } = require("sequelize");
 
-
 class ReportLogic {
     
     static async getTotalUploadsByUploader(sequelize, uploader)
@@ -81,16 +80,16 @@ class ReportLogic {
 
             let sqlTotal = "select count(*) as total from uploadfile where \"uploadfile\".\"imageCategory\" like 'poster' and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere;
 
-            let sql = "select uploadfile.id, uploadfile.filename, " +
+            let sql = "select uploadfile.id, uploadfile.filename, \"uploadfile\".\"imageCategory\", \"uploadfile\".\"posterType\", " +
             "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, " +
-            "count(filepackageitem.upload_file_id) as \"totalItems\" from " +
+            "count(posteritem.upload_file_id) as \"totalItems\" from " +
             "uploadfile left join " +
-            "filepackageitem on " +
-            "uploadfile.id = filepackageitem.upload_file_id " +
+            "posteritem on " +
+            "uploadfile.id = posteritem.upload_file_id " +
             "where \"uploadfile\".\"imageCategory\" like 'poster' " +
             "and \"uploadfile\".\"uploaded_by_email\" like '" + uploader + "' " + sqlwhere +
             "group by uploadfile.id, uploadfile.filename, " +
-            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date " +
+            "uploadfile.store_id,uploadfile.store_name,uploadfile.uploaded_by_email, uploadfile.uploaded_filename, uploadfile.upload_date, \"uploadfile\".\"imageCategory\", \"uploadfile\".\"posterType\" " +
             "order by uploadfile.id desc " +
             "offset " + offset + " limit " + limit;
 
@@ -138,7 +137,6 @@ class ReportLogic {
             "order by uploadfile.id desc " +
             "offset " + offset + " limit " + limit;
 
-            console.log(sql)
 
             const totalData = await sequelize.query(sqlTotal, { type: QueryTypes.SELECT });
             const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -374,41 +372,54 @@ class ReportLogic {
         try
         {
 
-
-
             let query = `
-            select 
-            A.storeid, A.store_name,   
-            sum(A.total_poster) as total_poster,   
-            sum(A.total_poster_telkomsel) as total_poster_telkomsel,    
-            sum(A.total_poster_competitor) as total_poster_competitor,      
-            sum(A.total_storefront) as total_storefront,     
-            sum(A.total_etalase) as total_etalase,     
-            sum(A.total_totalsales) as total_totalsales from  
-            (         
-                select su.storeid, su.store_name,        
-                case when u."imageCategory" like 'poster' then count(u.*) end as total_poster,
-                case when u."imageCategory" like 'poster' and u."operator" like 'telkomsel' then count(u.*) end as total_poster_telkomsel,
-                case when u."imageCategory" like 'poster' and u."operator" not like 'telkomsel' then count(u.*) end as total_poster_competitor,
-                case when u."imageCategory" like 'storefront' then count(u.*) end as total_storefront,         
-                case when u."imageCategory" like 'etalase' then count(u.*) end as total_etalase,         
-                case when u."imageCategory" like 'total-sales' then count(u.*) end as total_totalsales     
-                from "store_user" su     
-                left join          (             
-                    select *              
-                    from "uploadfile"             
-                    where                 
-                    "upload_date" between '${startdate}' and '${enddate}'                
-                    and "uploaded_by_email" like '${username}'        
-                ) u          
-                on su.storeid = u.store_id        
-                where su.username like '${username}'         
-                group by su.storeid, su.store_name, u."imageCategory" , u."operator"
-            ) A group by A.storeid, A.store_name`;
+            
+                select DISTINCT UPPER(su.storeid) as storeid, 
+                UPPER(su.store_name) as store_name, 
+                res.total_poster, 
+                res.total_poster_telkomsel,
+                res.total_poster_competitor,
+                res.total_storefront,
+                res.total_etalase,
+                res.total_totalsales
+                from "store_user" su
+                left join
+                (
+                select 
+                    r.store_id, 
+                    r.store_name, 
+                    sum(r.total_poster) as total_poster, 
+                    sum(r.total_poster_telkomsel) as total_poster_telkomsel, 
+                    sum(r.total_poster_competitor) as total_poster_competitor,
+                    sum(r.total_storefront) as total_storefront,
+                    sum(r.total_etalase) as total_etalase,
+                    sum(r.total_totalsales) as total_totalsales
 
-                        
-            console.log("==================")
-            console.log(query)
+                from
+                (
+                select 
+                    store_id, store_name,
+                    case when "imageCategory" like 'poster' and "operator" like 'telkomsel' then count(*) end as total_poster_telkomsel,
+                    case when "imageCategory" like 'poster' and "operator" not like 'telkomsel' then count(*) end as total_poster_competitor,
+                    case when "imageCategory" like 'storefront' then count(*) end as total_storefront,
+                    case when "imageCategory" like 'etalase' then count(*) end as total_etalase,
+                    case when "imageCategory" like 'total-sales' then count(*) end as total_totalsales,
+                    case when "imageCategory" like 'poster' then count(*) end as total_poster
+                from "uploadfile"            
+                where                 
+                "upload_date" between '${startdate}' and '${enddate}'     
+                and "uploaded_by_email" ilike '${username}' 
+                group by "imageCategory", "operator", "store_id", "store_name"
+                ) r
+                group by r.store_id, r.store_name
+                ) res
+                on 
+                su.storeid like res.store_id
+                where
+                su."username" like '${username}'
+                `;
+
+   
 
             let result = await sequelize.query(query, { type: QueryTypes.SELECT });
             result = ReportLogic.setStatus(result);

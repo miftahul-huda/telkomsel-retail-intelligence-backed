@@ -6,7 +6,6 @@ const UserLogic = require('../modules/logic/userlogic')
 
 router.post('/register', function (req, res){
     let user = req.body;
-    console.log(user);
     let fullName  = user.fullname;
     let firstnames = fullName.split(" ");
     let lastname = "";

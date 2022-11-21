@@ -17,7 +17,6 @@ class PosterItemLogic {
             try {
                 posterItem.isTransfered = 0;
                 let newposterItem = await PosterItemModel.create(posterItem);
-                console.log(newposterItem);
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newposterItem;
                 return  result;

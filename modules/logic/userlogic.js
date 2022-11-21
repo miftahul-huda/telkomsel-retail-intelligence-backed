@@ -13,7 +13,6 @@ class UserLogic {
     static clear(user){
         var sjson = JSON.stringify(user);
         var clone = JSON.parse(sjson);
-        console.log(clone);
         delete clone["password"]
         return clone;
     }
@@ -35,7 +34,6 @@ class UserLogic {
                 include: CountryAndCityModel
             });
             let user = (users.length  > 0) ?  users[0] : null;
-            console.log(user);
             if(user == null)
                 return { success: false, message: 'User tidak terdaftar, atau password salah' }
             else
@@ -53,7 +51,6 @@ class UserLogic {
             try {
                 user.createdAt = new Date();
                 let newUser = await UserModel.create(user);
-                console.log(newUser);
                 //newUser = this.clear(user)
                 result.payload = newUser;
                 return  result;
@@ -119,7 +116,6 @@ class UserLogic {
     static async update(id,  user)
     {
         let result = this.successate(user);
-        console.log(id)
         if(result.success){
             try {
                 let newUser = await UserModel.update(user, { where:  { id: id }  });

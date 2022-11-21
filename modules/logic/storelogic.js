@@ -3,6 +3,7 @@ const StoreUserModel  = require( '../models/storeusermodel')
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
+const { condition } = require('sequelize');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -33,7 +34,6 @@ class StoreLogic {
 
     static async findAllByCity(city)
     {
-        console.log("Store by city")
         try{
             let where = {};
             let limit = 1;
@@ -217,7 +217,6 @@ class StoreLogic {
             try {
                 
                 let newStore = await StoreModel.create(store);
-                console.log(newStore);
                 //newUser = this.clear(user)
                 result.payload = newStore;
                 return  result;
@@ -276,6 +275,9 @@ class StoreLogic {
                     cond1, cond2
                 ]
             }
+
+            //cond = cond2;
+
             let stores  = await StoreUserModel.findAll({
                 where: cond
             });

@@ -6,8 +6,7 @@ const ItemSubCategoryTypeLogic = require('../modules/logic/itemsubcategorytypelo
 
 router.post('/create', function (req, res){
     let itemSubCategoryType = req.body;
-    console.log("itemSubCategoryType")
-    console.log(itemSubCategoryType)
+
 
     ItemSubCategoryTypeLogic.create(itemSubCategoryType).then(function (itemSubCategoryType)
     {

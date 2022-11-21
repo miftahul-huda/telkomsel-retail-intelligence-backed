@@ -17,7 +17,6 @@ const writeFilePromise = (file, data) => {
 /* POST applications listing. */
 router.post('/', function (req, res, next) {
     let file = req.body;
-    console.log(file);
     let base64Data  =   file.content.replace(/^data:image\/png;base64,/, "");
     base64Data  +=  base64Data.replace('+', ' ');
     binaryData  =   new Buffer(base64Data, 'base64').toString('binary');
@@ -57,9 +56,7 @@ async function uploadFileToGcs(projectId, credential, bucketName, filename) {
 
 /* POST applications listing. */
 router.post('/gcs', function (req, res, next) {
-    console.log("fuck gcs")
     let file = req.body;
-    console.log(file);
     let base64Data  =   file.content.replace(/^data:image\/png;base64,/, "");
     base64Data  +=  base64Data.replace('+', ' ');
     binaryData  =   new Buffer(base64Data, 'base64').toString('binary');

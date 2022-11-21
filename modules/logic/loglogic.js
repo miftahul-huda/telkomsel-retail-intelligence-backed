@@ -83,7 +83,6 @@ class LogLogic {
     static async update(id,  log)
     {
         let result = this.successate(log);
-        console.log(id)
         if(result.success){
             try {
                 let newlog = await LogModel.update(log, { where:  { id: id }  });

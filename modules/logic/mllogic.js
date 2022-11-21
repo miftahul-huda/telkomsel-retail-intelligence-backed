@@ -294,11 +294,9 @@ class MlLogic
 
             if(i >= areas.length)
             {
-              console.log("areas")
-              console.log(areas);
+
               let dominantOps = MlLogic.areas2dominantOps(areas);
-              console.log("dominantOps")
-              console.log(dominantOps);
+   
               MlLogic.deleteAreaFiles(areas);
               resolve({ success: true, payload: dominantOps });
             }

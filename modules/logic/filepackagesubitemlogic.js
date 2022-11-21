@@ -21,7 +21,7 @@ class FilePackageSubItemLogic {
             try {
                 filePackageSubItem.isTransfered = 0;
                 let newfilePackageSubItem = await FilePackageSubItemModel.create(filePackageSubItem);
-                console.log(newfilePackageSubItem);
+
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newfilePackageSubItem;
                 return  result;
@@ -61,7 +61,6 @@ class FilePackageSubItemLogic {
             "uploadfile on filepackageitem.upload_file_id = uploadfile.id " +
             "where " +
             "\"uploadfile\".\"isTransfered\" = " + isTransfered;
-            console.log(query);
             let filePackageSubItems  = await sequelize.query(query, { type: QueryTypes.SELECT });
             
             /*await FilePackageSubItemModel.findAll({
@@ -111,7 +110,6 @@ class FilePackageSubItemLogic {
     static async update(id,  filePackageSubItem)
     {
         let result = this.validateCreate(filePackageSubItem);
-        console.log(id)
         if(result.success){
             try {
                 let item = await FilePackageSubItemModel.update(filePackageSubItem, { where:  { id: id }  });
@@ -141,9 +139,7 @@ class FilePackageSubItemLogic {
                 sIds[i] = parseInt(sIds[i])
 
             let uploadFiles = await UploadFileModel.update({ isTransfered : isTransfered }, { where:  { id: {[Op.in]:  sIds} }});
-            
-            console.log("updateIsTransfered " + isTransfered)
-            console.log(uploadFiles);
+
 
             result.payload = uploadFiles;
             return  result;

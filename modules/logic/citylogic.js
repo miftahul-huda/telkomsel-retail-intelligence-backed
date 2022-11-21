@@ -11,7 +11,6 @@ class CityLogic {
 
     static async findAll(citycode)
     {
-        console.log(citycode)
         try{
             let cities  = await CountryAndCityModel.findAll({
                 attributes: ['id', 'city', 'lon', 'lat'],

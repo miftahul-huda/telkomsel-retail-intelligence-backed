@@ -6,8 +6,7 @@ const FilePackageSubItemLogic = require('../modules/logic/filepackagesubitemlogi
 
 router.post('/create', function (req, res){
     let filePackageSubItem = req.body;
-    console.log("filePackageSubItem")
-    console.log(filePackageSubItem)
+
 
     FilePackageSubItemLogic.create(filePackageSubItem).then(function (filePackageSubItem)
     {

@@ -6,8 +6,7 @@ const EtalaseItemLogic = require('../modules/logic/etalaseitemlogic')
 
 router.post('/create', function (req, res){
     let etalaseItem = req.body;
-    console.log("etalaseItem")
-    console.log(etalaseItem)
+
 
     EtalaseItemLogic.create(etalaseItem).then(function (etalaseItem)
     {

@@ -11,7 +11,6 @@ class CityLogic {
 
     static async findAll(operator)
     {
-        console.log(operator)
         try{
             let packages  = await PackageModel.findAll({
                 where: {

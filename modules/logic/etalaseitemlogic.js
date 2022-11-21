@@ -17,7 +17,6 @@ class EtalaseItemLogic {
             try {
                 fileEtalaseItem.isTransfered = 0;
                 let newfileEtalaseItem = await EtalaseItemModel.create(fileEtalaseItem);
-                console.log(newfileEtalaseItem);
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newfileEtalaseItem;
                 return  result;
@@ -77,7 +76,6 @@ class EtalaseItemLogic {
 
     static async findByFileId(fileid)
     {
-        console.log(fileid)
         try{
             let fileEtalaseItems  = await EtalaseItemModel.findAll({
                 where: {
@@ -85,8 +83,7 @@ class EtalaseItemLogic {
                 }
             })
 
-            console.log("fileEtalaseItems")
-            console.log(fileEtalaseItems)
+
             return { success: true, payload: fileEtalaseItems }
         }
         catch (error)

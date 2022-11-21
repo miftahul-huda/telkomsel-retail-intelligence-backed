@@ -133,7 +133,6 @@ class ApplicationLogic {
     static async update(id,  app)
     {
         let result = this.successate(app);
-        console.log(id)
         if(result.success){
             try {
                 let newapp = await ApplicationModel.update(app, { where:  { id: id }  });

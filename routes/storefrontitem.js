@@ -6,8 +6,6 @@ const StoreFrontItemLogic = require('../modules/logic/storefrontitemlogic')
 
 router.post('/create', function (req, res){
     let stroreFrontItem = req.body;
-    console.log("stroreFrontItem")
-    console.log(stroreFrontItem)
 
     StoreFrontItemLogic.create(stroreFrontItem).then(function (stroreFrontItem)
     {

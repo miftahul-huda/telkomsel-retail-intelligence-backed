@@ -58,7 +58,6 @@ router.get('/area', function (req, res){
 
   StoreLogic.findAllArea().then(function (areas)
   {
-    console.log(areas);
     res.send(areas);
   }).catch(function (err){
     console.log("error")
@@ -71,7 +70,6 @@ router.get('/by-area/:area', function (req, res){
   let area = req.params.area;
   StoreLogic.findAll(area).then(function (stores)
   {
-    console.log(stores);
     res.send(stores);
   }).catch(function (err){
     console.log("error")
@@ -84,7 +82,6 @@ router.get('/by-area/nolimit/:area', function (req, res){
   let area = req.params.area;
   StoreLogic.findAllNoLimit(area).then(function (stores)
   {
-    console.log(stores);
     res.send(stores);
   }).catch(function (err){
     console.log("error")
@@ -95,8 +92,7 @@ router.get('/by-area/nolimit/:area', function (req, res){
 router.get('/search/by-area/:keyword/:area', function (req, res){
   let keyword = req.params.keyword;
   let area = req.params.area;
-  console.log("search:")
-  console.log(keyword)
+
 
   StoreLogic.findByKeyword(keyword, area).then(function (Stores)
   {
@@ -113,7 +109,6 @@ router.get('/city', function (req, res){
 
   StoreLogic.findAllCity().then(function (cities)
   {
-    console.log(cities);
     res.send(cities);
   }).catch(function (err){
     console.log("error")

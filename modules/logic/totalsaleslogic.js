@@ -43,7 +43,6 @@ class TotalSalesLogic {
             try {
                 
                 let newTotalSales = await TotalSalesModel.create(totalsales);
-                console.log(newTotalSales);
                 //newUser = this.clear(user)
                 result.payload = newTotalSales;
                 return  result;
@@ -72,7 +71,6 @@ class TotalSalesLogic {
                         id: id
                     }
                 });
-                console.log(newTotalSales);
                 //newUser = this.clear(user)
                 result.payload = newTotalSales;
                 return  result;

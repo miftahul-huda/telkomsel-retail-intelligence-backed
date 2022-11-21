@@ -49,7 +49,6 @@ router.get('', function (req, res){
 
   TotalSalesLogic.findAll().then(function (totalSales)
   {
-    console.log(totalSales);
     res.send(totalSales);
   }).catch(function (err){
     console.log("error")

@@ -21,7 +21,6 @@ class ItemSubCategoryLogic {
             try {
                 itemSubCategory.isTransfered = 0;
                 let newitemSubCategory = await ItemSubCategoryModel.create(itemSubCategory);
-                console.log(newitemSubCategory);
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newitemSubCategory;
                 return  result;
@@ -85,7 +84,6 @@ class ItemSubCategoryLogic {
     static async update(id,  itemSubCategory)
     {
         let result = this.validateCreate(itemSubCategory);
-        console.log(id)
         if(result.success){
             try {
                 let item = await ItemSubCategoryModel.update(itemSubCategory, { where:  { id: id }  });

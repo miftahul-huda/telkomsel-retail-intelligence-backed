@@ -6,8 +6,7 @@ const PosterItemLogic = require('../modules/logic/posteritemlogic')
 
 router.post('/create', function (req, res){
     let posteritem = req.body;
-    console.log("posteritem")
-    console.log(posteritem)
+
 
     PosterItemLogic.create(posteritem).then(function (result)
     {

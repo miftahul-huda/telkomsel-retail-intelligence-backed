@@ -17,7 +17,6 @@ class StoreFrontItemLogic {
             try {
                 fileStoreFrontItem.isTransfered = 0;
                 let newfileStoreFrontItem = await StoreFrontItemModel.create(fileStoreFrontItem);
-                console.log(newfileStoreFrontItem);
                 //newUploadFile = this.clear(uploadfile)
                 result.payload = newfileStoreFrontItem;
                 return  result;
@@ -108,7 +107,6 @@ class StoreFrontItemLogic {
     static async update(id,  fileStoreFrontItem)
     {
         let result = this.validateCreate(fileStoreFrontItem);
-        console.log(id)
         if(result.success){
             try {
                 let item = await StoreFrontItemModel.update(fileStoreFrontItem, { where:  { id: id }  });

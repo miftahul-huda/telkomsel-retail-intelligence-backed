@@ -11,7 +11,6 @@ class CityLogic {
 
     static async findAll(operator_id)
     {
-        console.log(operator_id)
         try{
             let suboperators  = await SubOperatorModel.findAll({
                 where: {
