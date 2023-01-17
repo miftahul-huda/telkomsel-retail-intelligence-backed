@@ -612,8 +612,12 @@ class ReportLogic {
                 pixel_height,
                 make,
                 model,
-                "store_id"  as poster_storeid,
-                "store_name" as poster_store_name,
+                "uploadfile"."store_id"  as storeid,
+                "uploadfile"."store_name" as store_name,
+                "store"."store_city" as store_city,
+                "store"."store_area" as store_area,
+                "store"."store_branch" as store_branch,
+                "store"."store_region" as store_region,
                 "operator" as poster_operator,
                 "posterType" as poster_type,
                 "posterCategory" as poster_cagegory,
@@ -627,6 +631,9 @@ class ReportLogic {
             inner join posteritem
             on 
                 uploadfile.id = posteritem.upload_file_id   
+            left join store
+            on
+                uploadfile.store_id = store.storeid
             where                 
                 "upload_date" between '${startdate}' and '${enddate}'      
             `;
@@ -671,8 +678,12 @@ class ReportLogic {
                 pixel_height,
                 make,
                 model,
-                "store_id"  as storefront_storeid,
-                "store_name" as storefront_store_name,
+                "uploadfile"."store_id"  as storeid,
+                "uploadfile"."store_name" as store_name,
+                "store"."store_city" as store_city,
+                "store"."store_area" as store_area,
+                "store"."store_branch" as store_branch,
+                "store"."store_region" as store_region,
                 "operatorDominant" as storefront_dominant_operator,
                 "storefrontitem"."operator" as storefront_item_operator,
                 "storefrontitem"."percentage" as storefront_item_operator_percentage
@@ -680,6 +691,9 @@ class ReportLogic {
             inner join storefrontitem
             on 
                 uploadfile.id = storefrontitem.upload_file_id
+            left join store
+            on
+                uploadfile.store_id = store.storeid
             where                 
                 "upload_date" between '${startdate}' and '${enddate}'      
             `;
@@ -724,8 +738,12 @@ class ReportLogic {
                 pixel_height,
                 make,
                 model,
-                "store_id"  as etalase_storeid,
-                "store_name" as etalase_store_name,
+                "uploadfile"."store_id"  as storeid,
+                "uploadfile"."store_name" as store_name,
+                "store"."store_city" as store_city,
+                "store"."store_area" as store_area,
+                "store"."store_branch" as store_branch,
+                "store"."store_region" as store_region,
                 "etalaseitem"."operator" as etalase_operator,
                 "etalaseitem"."visibility_percentage" as etalaseitem_visibility_percentage,
                 "etalaseitem"."availability_percentage" as etalaseitem_availability_percentage,
@@ -735,6 +753,9 @@ class ReportLogic {
             inner join etalaseitem
             on 
                 uploadfile.id = etalaseitem.upload_file_id
+            left join store
+            on
+                uploadfile.store_id = store.storeid
             where                 
                 "upload_date" between '${startdate}' and '${enddate}'      
             `;
@@ -779,8 +800,12 @@ class ReportLogic {
                 pixel_height,
                 make,
                 model,
-                "store_id"  as totalsales_storeid,
-                "store_name" as totalsales_store_name,
+                "uploadfile"."store_id"  as storeid,
+                "uploadfile"."store_name" as store_name,
+                "store"."store_city" as store_city,
+                "store"."store_area" as store_area,
+                "store"."store_branch" as store_branch,
+                "store"."store_region" as store_region,
                 "totalsales"."isiUlang" as totalsales_isiulang_palingbanyak_dibeli,
                 "totalsales"."paketPalingBanyakDibeli" as totalsales_paket_palingbanyak_dibeli,
                 "totalsales"."paketPalingBanyakDibeliBesaran" as totalsales_besaran_paket_palingbanyak_dibeli,
@@ -791,6 +816,9 @@ class ReportLogic {
             inner join totalsales
             on 
                 uploadfile.id = totalsales.upload_file_id
+            left join store
+            on
+                uploadfile.store_id = store.storeid
             where                 
                 "upload_date" between '${startdate}' and '${enddate}'      
             `;
