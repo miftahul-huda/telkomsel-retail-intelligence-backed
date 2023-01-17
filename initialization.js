@@ -27,25 +27,72 @@ const OutletScoreModel = require("./modules/models/outletscoremodel")
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const PosterItemModel = require('./modules/models/posteritemmodel')
+const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 
 
-
-const sequelize = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
-    host: process.env.DBHOST,
-    dialect: process.env.DBENGINE,
-    logging: false
-});
 
 class Initialization {
 
     static getSequelize()
     {
+        /*
+        const client = new SecretManagerServiceClient();
+        let projectId = process.env.GCP_PROJECT_ID;
+        let env = process.env.DEPLOYMENT;
+
+        // Access the secret.
+        //DBHOST
+        let name = `projects/${projectId}/secrets/${env}_DBHOST/versions/latest`;
+        let [accessResponse] = await client.accessSecretVersion({
+            name: name,
+        });
+        
+        let dbhost = accessResponse.payload.data.toString('utf8');
+
+        //DBNAME
+        name = `projects/${projectId}/secrets/${env}_DBNAME/versions/latest`;
+        [accessResponse] = await client.accessSecretVersion({
+            name: name,
+        });
+        let dbname = accessResponse.payload.data.toString('utf8');
+
+        //DBUSER
+        name = `projects/${projectId}/secrets/${env}_DBUSER/versions/latest`;
+        [accessResponse] = await client.accessSecretVersion({
+            name: name,
+        });
+        const dbuser = accessResponse.payload.data.toString('utf8');
+
+        //DBPASSWORD
+        name = `projects/${projectId}/secrets/${env}_DBPASSWORD/versions/latest`;
+        [accessResponse] = await client.accessSecretVersion({
+            name: name,
+        });
+        const dbpassword = accessResponse.payload.data.toString('utf8');
+
+        */
+
+
+        let dbname = process.env.DBNAME;
+        let dbuser = process.env.DBUSER;
+        let dbpassword = process.env.DBPASSWORD;
+        let dbhost = process.env.DBHOST;
+        console.log("db : " + dbname)
+
+        const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
+            host: dbhost,
+            dialect: process.env.DBENGINE,
+            logging: false
+        });
+
         return sequelize;
     }
 
     static async initializeDatabase(){
 
         let force = false;
+
+        let sequelize =  Initialization.getSequelize();
 
         CountryAndCityModel.initialize(sequelize);
 

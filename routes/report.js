@@ -152,12 +152,12 @@ router.post('/etalase/byuploader/:uploader/:offset/:limit', function (req, res){
     })
 })
 
-router.get("/completeness/:username", function(req,res) {
+router.get("/completeness/:username",  function(req,res) {
     let username  = req.params.username
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
 
-    ReportLogic.getCompletenessReportByUsernameAndTime(Initialization.getSequelize(), username, startdate, enddate).then((result)=>{
+    ReportLogic.getCompletenessReportByUsernameAndTime( Initialization.getSequelize(), username, startdate, enddate).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /completeness/:username " + username + ", startdate: " + startdate + ", enddate: " + enddate)
@@ -166,11 +166,11 @@ router.get("/completeness/:username", function(req,res) {
     })
 })
 
-router.get("/completeness", function(req,res) {
+router.get("/completeness",  function(req,res) {
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
 
-    ReportLogic.getCompletenessReportByTime(Initialization.getSequelize(), startdate, enddate).then((result)=>{
+    ReportLogic.getCompletenessReportByTime( Initialization.getSequelize(), startdate, enddate).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /completeness, startdate: " + startdate + ", enddate: " + enddate)
@@ -178,6 +178,61 @@ router.get("/completeness", function(req,res) {
         res.send(err)
     })
 })
-  
+
+
+router.get("/raw/poster",  function(req,res) {
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getPosterRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /raw/poster, startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
+
+router.get("/raw/storefront",  function(req,res) {
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getStoreFrontRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /raw/storefront, startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
+
+
+router.get("/raw/etalase",  function(req,res) {
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getEtalaseRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /raw/etalase, startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
+
+
+router.get("/raw/totalsales",  function(req,res) {
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+
+    ReportLogic.getTotalSalesRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log("error /raw/totalsales, startdate: " + startdate + ", enddate: " + enddate)
+        console.log(err);
+        res.send(err)
+    })
+})
+
 
 module.exports = router;

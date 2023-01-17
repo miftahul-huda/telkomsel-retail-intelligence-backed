@@ -10,6 +10,7 @@ const OutletScoreModel = require('../models/outletscoremodel');
 const ApplicationModel = require('../models/applicationmodel');
 const Initialization = require('../../initialization');
 const StoreFrontItemModel = require('../models/storefrontitemmodel');
+const StoreUserModel = require('../models/storeusermodel');
 
 
 
@@ -69,6 +70,9 @@ class UploadFileLogic {
         let result = await this.validate(uploadfile);
         if(result.success){
             try {
+
+                await UploadFileLogic.checkAndCreateOutletForUser(uploadfile.store_id, uploadfile.store_name, uploadfile.uploaded_by_email, uploadfile.sfcode)
+
                 uploadfile.isTransfered = 0;
                 uploadfile.imageStatus = "uploaded"
                 //uploadfile.upload_date = this.getCurrentDate();
@@ -176,6 +180,32 @@ class UploadFileLogic {
             console.log("Invalid")
             console.log(result)
             throw result
+        }
+
+    }
+
+    static async checkAndCreateOutletForUser(outletid, outletname, username, sfcode)
+    {
+
+        try
+        {
+            let found = await StoreUserModel.findOne({ where: { [Op.and]: { storeid: outletid, sfcode: sfcode}  } });
+            if(found == null)
+            {
+                let newStoreUser = {};
+                newStoreUser.storeid = outletid;
+                newStoreUser.store_name = outletname;
+                newStoreUser.username = username;
+                newStoreUser.sfcode = sfcode;
+    
+                await StoreUserModel.create(newStoreUser);
+            }
+
+        }
+        catch(e)
+        {
+            console.log("error.checkAndCreateOutletForUser()")
+            console.log(e)
         }
 
     }

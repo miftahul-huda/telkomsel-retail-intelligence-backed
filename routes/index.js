@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.redirect('/web');
+  //res.redirect('/web');
+  res.send("Retina backend")
 });
 
 module.exports = router;

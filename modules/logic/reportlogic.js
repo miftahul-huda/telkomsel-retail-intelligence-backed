@@ -60,6 +60,8 @@ class ReportLogic {
         }
     }
 
+
+
     static async getAllPostersByUploader(sequelize, uploader, offset, limit, opt=null)
     {
         try{
@@ -367,10 +369,40 @@ class ReportLogic {
         }
     }
 
+    static addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }      
+
+    static formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
+     
+
     static async getCompletenessReportByUsernameAndTime(sequelize, username, startdate, enddate)
     {
         try
         {
+
+            startdate = ReportLogic.addDays(startdate, -1);
+            enddate = ReportLogic.addDays(enddate, 1);
+
+            startdate = ReportLogic.formatDate(startdate);
+            enddate = ReportLogic.formatDate(enddate);
+
+            console.log(startdate)
+            console.log(enddate)
 
             let query = `
             
@@ -407,7 +439,7 @@ class ReportLogic {
                     case when "imageCategory" like 'poster' then count(*) end as total_poster
                 from "uploadfile"            
                 where                 
-                "upload_date" between '${startdate}' and '${enddate}'     
+                "upload_date" between '${startdate}' and '${enddate}'      
                 and "uploaded_by_email" ilike '${username}' 
                 group by "imageCategory", "operator", "store_id", "store_name"
                 ) r
@@ -547,6 +579,230 @@ class ReportLogic {
         })
 
         return rows;
+    }
+
+
+    static async getPosterRawData(sequelize, startdate, enddate)
+    {
+        try{
+
+            startdate = ReportLogic.addDays(startdate, -1);
+            enddate = ReportLogic.addDays(enddate, 1);
+
+            startdate = ReportLogic.formatDate(startdate);
+            enddate = ReportLogic.formatDate(enddate);
+
+            let sql = `
+            select 
+                filename as original_filename,
+                upload_date,
+                picture_taken_date,
+                picture_taken_by,
+                uploaded_by_email as uploader_username,
+                uploaded_by_fullname as uploader_name,
+                uploaded_filename,
+                lon,
+                lat,
+                alt,
+                exposure_time,
+                iso_speed_rating,
+                orientation,
+                flash,
+                pixel_width,
+                pixel_height,
+                make,
+                model,
+                "store_id"  as poster_storeid,
+                "store_name" as poster_store_name,
+                "operator" as poster_operator,
+                "posterType" as poster_type,
+                "posterCategory" as poster_cagegory,
+                "areaPromotion" as poster_promotion_area,
+                posteritem.denome as poster_item_denome,
+                "posteritem"."quotaGb" as poster_item_quotagb,
+                "posteritem"."transferPrice" as poster_item_transfer_price,
+                "posteritem"."endUserPrice" as poster_item_end_user_price,
+                "posteritem"."activeDays" as poster_item_active_days
+            from uploadfile
+            inner join posteritem
+            on 
+                uploadfile.id = posteritem.upload_file_id   
+            where                 
+                "upload_date" between '${startdate}' and '${enddate}'      
+            `;
+
+            const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: posters};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getStoreFrontRawData(sequelize, startdate, enddate)
+    {
+        try{
+
+            startdate = ReportLogic.addDays(startdate, -1);
+            enddate = ReportLogic.addDays(enddate, 1);
+
+            startdate = ReportLogic.formatDate(startdate);
+            enddate = ReportLogic.formatDate(enddate);
+
+            let sql = `
+            select 
+                filename as original_filename,
+                upload_date,
+                picture_taken_date,
+                picture_taken_by,
+                uploaded_by_email as uploader_username,
+                uploaded_by_fullname as uploader_name,
+                uploaded_filename,
+                lon,
+                lat,
+                alt,
+                exposure_time,
+                iso_speed_rating,
+                orientation,
+                flash,
+                pixel_width,
+                pixel_height,
+                make,
+                model,
+                "store_id"  as storefront_storeid,
+                "store_name" as storefront_store_name,
+                "operatorDominant" as storefront_dominant_operator,
+                "storefrontitem"."operator" as storefront_item_operator,
+                "storefrontitem"."percentage" as storefront_item_operator_percentage
+            from uploadfile
+            inner join storefrontitem
+            on 
+                uploadfile.id = storefrontitem.upload_file_id
+            where                 
+                "upload_date" between '${startdate}' and '${enddate}'      
+            `;
+
+            const storefronts = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: storefronts};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getEtalaseRawData(sequelize, startdate, enddate)
+    {
+        try{
+
+            startdate = ReportLogic.addDays(startdate, -1);
+            enddate = ReportLogic.addDays(enddate, 1);
+
+            startdate = ReportLogic.formatDate(startdate);
+            enddate = ReportLogic.formatDate(enddate);
+
+            let sql = `
+            select 
+                filename as original_filename,
+                upload_date,
+                picture_taken_date,
+                picture_taken_by,
+                uploaded_by_email as uploader_username,
+                uploaded_by_fullname as uploader_name,
+                uploaded_filename,
+                lon,
+                lat,
+                alt,
+                exposure_time,
+                iso_speed_rating,
+                orientation,
+                flash,
+                pixel_width,
+                pixel_height,
+                make,
+                model,
+                "store_id"  as etalase_storeid,
+                "store_name" as etalase_store_name,
+                "etalaseitem"."operator" as etalase_operator,
+                "etalaseitem"."visibility_percentage" as etalaseitem_visibility_percentage,
+                "etalaseitem"."availability_percentage" as etalaseitem_availability_percentage,
+                "etalaseitem"."visibility_score" as etalaseitem_visibility_score,
+                "etalaseitem"."availability_score" as etalaseitem_availability_score
+            from uploadfile
+            inner join etalaseitem
+            on 
+                uploadfile.id = etalaseitem.upload_file_id
+            where                 
+                "upload_date" between '${startdate}' and '${enddate}'      
+            `;
+
+            const etalase = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: etalase};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
+    }
+
+    static async getTotalSalesRawData(sequelize, startdate, enddate)
+    {
+        try{
+
+            startdate = ReportLogic.addDays(startdate, -1);
+            enddate = ReportLogic.addDays(enddate, 1);
+
+            startdate = ReportLogic.formatDate(startdate);
+            enddate = ReportLogic.formatDate(enddate);
+
+            let sql = `
+            select 
+                filename as original_filename,
+                upload_date,
+                picture_taken_date,
+                picture_taken_by,
+                uploaded_by_email as uploader_username,
+                uploaded_by_fullname as uploader_name,
+                uploaded_filename,
+                lon,
+                lat,
+                alt,
+                exposure_time,
+                iso_speed_rating,
+                orientation,
+                flash,
+                pixel_width,
+                pixel_height,
+                make,
+                model,
+                "store_id"  as totalsales_storeid,
+                "store_name" as totalsales_store_name,
+                "totalsales"."isiUlang" as totalsales_isiulang_palingbanyak_dibeli,
+                "totalsales"."paketPalingBanyakDibeli" as totalsales_paket_palingbanyak_dibeli,
+                "totalsales"."paketPalingBanyakDibeliBesaran" as totalsales_besaran_paket_palingbanyak_dibeli,
+                "totalsales"."operator" as totalsales_item_operator,
+                "totalsales"."totalPenjualanPerdana" as totalsales_item_penjualan_perdana,
+                "totalsales"."totalPenjualanVoucherFisik" as totalsales_item_total_penjualan_voucher_fisik
+            from uploadfile
+            inner join totalsales
+            on 
+                uploadfile.id = totalsales.upload_file_id
+            where                 
+                "upload_date" between '${startdate}' and '${enddate}'      
+            `;
+
+            const etalase = await sequelize.query(sql, { type: QueryTypes.SELECT });
+
+            return { success: true, payload: etalase};
+        }
+        catch(err)
+        {
+            return {success: false, error: err, message: err.message}
+        }
     }
 }
 
