@@ -1,4 +1,5 @@
 var express = require('express');
+const { off } = require('../app');
 var router = express.Router();
 var Initialization = require("../initialization")
 
@@ -183,8 +184,10 @@ router.get("/completeness",  function(req,res) {
 router.get("/raw/poster",  function(req,res) {
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
+    let offset = req.query.offset;
+    let limit = req.query.limit;
 
-    ReportLogic.getPosterRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+    ReportLogic.getPosterRawData( Initialization.getSequelize(), startdate, enddate, offset, limit).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /raw/poster, startdate: " + startdate + ", enddate: " + enddate)
@@ -196,8 +199,10 @@ router.get("/raw/poster",  function(req,res) {
 router.get("/raw/storefront",  function(req,res) {
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
+    let offset = req.query.offset;
+    let limit = req.query.limit;
 
-    ReportLogic.getStoreFrontRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+    ReportLogic.getStoreFrontRawData( Initialization.getSequelize(), startdate, enddate, offset, limit).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /raw/storefront, startdate: " + startdate + ", enddate: " + enddate)
@@ -210,8 +215,10 @@ router.get("/raw/storefront",  function(req,res) {
 router.get("/raw/etalase",  function(req,res) {
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
+    let offset = req.query.offset;
+    let limit = req.query.limit;
 
-    ReportLogic.getEtalaseRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+    ReportLogic.getEtalaseRawData( Initialization.getSequelize(), startdate, enddate, offset, limit).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /raw/etalase, startdate: " + startdate + ", enddate: " + enddate)
@@ -224,8 +231,10 @@ router.get("/raw/etalase",  function(req,res) {
 router.get("/raw/totalsales",  function(req,res) {
     let startdate = req.query.startdate;
     let enddate = req.query.enddate;
+    let offset = req.query.offset;
+    let limit = req.query.limit;
 
-    ReportLogic.getTotalSalesRawData( Initialization.getSequelize(), startdate, enddate).then((result)=>{
+    ReportLogic.getTotalSalesRawData( Initialization.getSequelize(), startdate, enddate, offset, limit).then((result)=>{
         res.send(result)
     }).catch((err)=>{
         console.log("error /raw/totalsales, startdate: " + startdate + ", enddate: " + enddate)

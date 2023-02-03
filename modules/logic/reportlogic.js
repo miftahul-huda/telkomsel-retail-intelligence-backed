@@ -582,7 +582,7 @@ class ReportLogic {
     }
 
 
-    static async getPosterRawData(sequelize, startdate, enddate)
+    static async getPosterRawData(sequelize, startdate, enddate, offset, limit)
     {
         try{
 
@@ -620,7 +620,7 @@ class ReportLogic {
                 "store"."store_region" as store_region,
                 "operator" as poster_operator,
                 "posterType" as poster_type,
-                "posterCategory" as poster_cagegory,
+                "posterCategory" as poster_category,
                 "areaPromotion" as poster_promotion_area,
                 posteritem.denome as poster_item_denome,
                 "posteritem"."quotaGb" as poster_item_quotagb,
@@ -635,7 +635,8 @@ class ReportLogic {
             on
                 uploadfile.store_id = store.storeid
             where                 
-                "upload_date" between '${startdate}' and '${enddate}'      
+                "upload_date" between '${startdate}' and '${enddate}' 
+            offset ${offset} limit ${limit}     
             `;
 
             const posters = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -648,7 +649,7 @@ class ReportLogic {
         }
     }
 
-    static async getStoreFrontRawData(sequelize, startdate, enddate)
+    static async getStoreFrontRawData(sequelize, startdate, enddate, offset, limit)
     {
         try{
 
@@ -695,7 +696,8 @@ class ReportLogic {
             on
                 uploadfile.store_id = store.storeid
             where                 
-                "upload_date" between '${startdate}' and '${enddate}'      
+                "upload_date" between '${startdate}' and '${enddate}'  
+            offset ${offset} limit ${limit}    
             `;
 
             const storefronts = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -708,7 +710,7 @@ class ReportLogic {
         }
     }
 
-    static async getEtalaseRawData(sequelize, startdate, enddate)
+    static async getEtalaseRawData(sequelize, startdate, enddate, offset, limit)
     {
         try{
 
@@ -748,17 +750,24 @@ class ReportLogic {
                 "etalaseitem"."visibility_percentage" as etalaseitem_visibility_percentage,
                 "etalaseitem"."availability_percentage" as etalaseitem_availability_percentage,
                 "etalaseitem"."visibility_score" as etalaseitem_visibility_score,
-                "etalaseitem"."availability_score" as etalaseitem_availability_score
+                "etalaseitem"."availability_score" as etalaseitem_availability_score,
+                "outletscore"."outlet_score" as av_score
             from uploadfile
             inner join etalaseitem
             on 
                 uploadfile.id = etalaseitem.upload_file_id
             left join store
             on
-                uploadfile.store_id = store.storeid
+                uploadfile.store_id = store.storeid 
+            left join outletscore
+            on
+                uploadfile.id = outletscore.upload_file_id
             where                 
-                "upload_date" between '${startdate}' and '${enddate}'      
+                "upload_date" between '${startdate}' and '${enddate}'  
+            offset ${offset} limit ${limit}    
             `;
+
+            //console.log(sql)
 
             const etalase = await sequelize.query(sql, { type: QueryTypes.SELECT });
 
@@ -770,7 +779,7 @@ class ReportLogic {
         }
     }
 
-    static async getTotalSalesRawData(sequelize, startdate, enddate)
+    static async getTotalSalesRawData(sequelize, startdate, enddate, offset, limit)
     {
         try{
 
@@ -820,12 +829,13 @@ class ReportLogic {
             on
                 uploadfile.store_id = store.storeid
             where                 
-                "upload_date" between '${startdate}' and '${enddate}'      
+                "upload_date" between '${startdate}' and '${enddate}'   
+            offset ${offset} limit ${limit}   
             `;
 
-            const etalase = await sequelize.query(sql, { type: QueryTypes.SELECT });
+            const totalsales = await sequelize.query(sql, { type: QueryTypes.SELECT });
 
-            return { success: true, payload: etalase};
+            return { success: true, payload: totalsales};
         }
         catch(err)
         {
