@@ -70,10 +70,11 @@ class UploadFileModel extends Model {
 
             isTransfered: DataTypes.INTEGER,
             isuploaded: DataTypes.INTEGER,
-            tag: DataTypes.STRING
+            tag: DataTypes.STRING,
+            phoneNumber: DataTypes.STRING
 
         }, 
-        { sequelize, modelName: 'uploadfile', tableName: 'uploadfile', force: force });
+        { sequelize, modelName: 'uploadfile', tableName: 'uploadfile', force: force, alter:true });
     }
 }
 

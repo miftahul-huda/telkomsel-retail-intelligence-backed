@@ -1,6 +1,7 @@
 const OperatorModel  = require( '../models/operatormodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op, QueryTypes } = require("sequelize");
+const { query } = require('express');
 
 class ReportLogic {
     
@@ -586,11 +587,17 @@ class ReportLogic {
     {
         try{
 
-            startdate = ReportLogic.addDays(startdate, -1);
-            enddate = ReportLogic.addDays(enddate, 1);
+            //startdate = ReportLogic.addDays(startdate, -1);
+            //enddate = ReportLogic.addDays(enddate, 1);
 
-            startdate = ReportLogic.formatDate(startdate);
-            enddate = ReportLogic.formatDate(enddate);
+            startdate = new Date(startdate);
+            enddate = new Date(enddate);
+            
+            startdate = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate() + " 00:00:00";
+            enddate = enddate.getFullYear() + "-" + (enddate.getMonth() + 1) + "-" + enddate.getDate() + " 23:59:59";
+
+            //startdate = ReportLogic.formatDate(startdate);
+            //enddate = ReportLogic.formatDate(enddate);
 
             let sql = `
             select 
@@ -600,6 +607,7 @@ class ReportLogic {
                 picture_taken_by,
                 uploaded_by_email as uploader_username,
                 uploaded_by_fullname as uploader_name,
+                phoneNumber as uploader_phone,
                 uploaded_filename,
                 lon,
                 lat,
@@ -645,7 +653,7 @@ class ReportLogic {
         }
         catch(err)
         {
-            return {success: false, error: err, message: err.message}
+            throw {success: false, error: err, message: err.message}
         }
     }
 
@@ -653,11 +661,12 @@ class ReportLogic {
     {
         try{
 
-            startdate = ReportLogic.addDays(startdate, -1);
-            enddate = ReportLogic.addDays(enddate, 1);
+            startdate = new Date(startdate);
+            enddate = new Date(enddate);
+            
+            startdate = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate() + " 00:00:00";
+            enddate = enddate.getFullYear() + "-" + (enddate.getMonth() + 1) + "-" + enddate.getDate() + " 23:59:59";
 
-            startdate = ReportLogic.formatDate(startdate);
-            enddate = ReportLogic.formatDate(enddate);
 
             let sql = `
             select 
@@ -667,6 +676,7 @@ class ReportLogic {
                 picture_taken_by,
                 uploaded_by_email as uploader_username,
                 uploaded_by_fullname as uploader_name,
+                phoneNumber as uploader_phone,
                 uploaded_filename,
                 lon,
                 lat,
@@ -706,7 +716,7 @@ class ReportLogic {
         }
         catch(err)
         {
-            return {success: false, error: err, message: err.message}
+            throw {success: false, error: err, message: err.message}
         }
     }
 
@@ -714,11 +724,12 @@ class ReportLogic {
     {
         try{
 
-            startdate = ReportLogic.addDays(startdate, -1);
-            enddate = ReportLogic.addDays(enddate, 1);
+            startdate = new Date(startdate);
+            enddate = new Date(enddate);
+            
+            startdate = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate() + " 00:00:00";
+            enddate = enddate.getFullYear() + "-" + (enddate.getMonth() + 1) + "-" + enddate.getDate() + " 23:59:59";
 
-            startdate = ReportLogic.formatDate(startdate);
-            enddate = ReportLogic.formatDate(enddate);
 
             let sql = `
             select 
@@ -728,6 +739,7 @@ class ReportLogic {
                 picture_taken_by,
                 uploaded_by_email as uploader_username,
                 uploaded_by_fullname as uploader_name,
+                phoneNumber as uploader_phone,
                 uploaded_filename,
                 lon,
                 lat,
@@ -775,7 +787,7 @@ class ReportLogic {
         }
         catch(err)
         {
-            return {success: false, error: err, message: err.message}
+            throw {success: false, error: err, message: err.message}
         }
     }
 
@@ -783,11 +795,12 @@ class ReportLogic {
     {
         try{
 
-            startdate = ReportLogic.addDays(startdate, -1);
-            enddate = ReportLogic.addDays(enddate, 1);
+            startdate = new Date(startdate);
+            enddate = new Date(enddate);
+            
+            startdate = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate() + " 00:00:00";
+            enddate = enddate.getFullYear() + "-" + (enddate.getMonth() + 1) + "-" + enddate.getDate() + " 23:59:59";
 
-            startdate = ReportLogic.formatDate(startdate);
-            enddate = ReportLogic.formatDate(enddate);
 
             let sql = `
             select 
@@ -797,6 +810,7 @@ class ReportLogic {
                 picture_taken_by,
                 uploaded_by_email as uploader_username,
                 uploaded_by_fullname as uploader_name,
+                phoneNumber as uploader_phone,
                 uploaded_filename,
                 lon,
                 lat,
@@ -839,7 +853,7 @@ class ReportLogic {
         }
         catch(err)
         {
-            return {success: false, error: err, message: err.message}
+            throw {success: false, error: err, message: err.message}
         }
     }
 }

@@ -157,7 +157,7 @@ class Initialization {
         //StoreFrontItemModel.belongsTo(UploadFileModel, {foreignKey: 'upload_file_id' })
 
 
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });
 
 
         //ApplicationModel.belongsToMany(UserModel, { through: UserApplicationModel } )
