@@ -74,7 +74,7 @@ class UploadFileModel extends Model {
             phoneNumber: DataTypes.STRING
 
         }, 
-        { sequelize, modelName: 'uploadfile', tableName: 'uploadfile', force: force, alter:true });
+        { sequelize, modelName: 'uploadfile', tableName: 'uploadfile', force: force });
     }
 }
 
