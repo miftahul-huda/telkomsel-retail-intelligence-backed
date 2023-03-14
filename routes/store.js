@@ -65,6 +65,19 @@ router.get('/area', function (req, res){
   })
 })
 
+
+router.get('/kecamatan/:city', function (req, res){
+
+  let city = req.params.city;
+  StoreLogic.findAllKecamatan(city).then(function (areas)
+  {
+    res.send(areas);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
 router.get('/by-area/:area', function (req, res){
 
   let area = req.params.area;

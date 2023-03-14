@@ -1,5 +1,6 @@
 [
-    { "path" :  "/", "router"  : "./routes/index" },
+    { "path" :  "/", "router"  : "./routes/info" },
+    { "path" :  "/info", "router"  : "./routes/info" },
     { "path" :  "/country", "router"  : "./routes/country" },
     { "path" :  "/city", "router"  : "./routes/city" },
     { "path" :  "/user", "router"  : "./routes/user" },
@@ -28,6 +29,7 @@
     { "path" :  "/etalaseitem", "router"  : "./routes/etalaseitem" },
     { "path" :  "/posteritem", "router"  : "./routes/posteritem" },
     { "path" :  "/notification", "router"  : "./routes/notification" },
-    { "path" :  "/currentcycle", "router"  : "./routes/currentcycle" }
+    { "path" :  "/currentcycle", "router"  : "./routes/currentcycle" },
+    { "path" :  "/location", "router"  : "./routes/location" }
 
 ]

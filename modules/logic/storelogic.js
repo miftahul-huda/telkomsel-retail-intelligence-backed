@@ -4,6 +4,7 @@ const StoreUserModel  = require( '../models/storeusermodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 const { condition } = require('sequelize');
+const { Store } = require('express-session');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -40,7 +41,14 @@ class StoreLogic {
 
             if(city != null)
             {
-                where = {  store_city: { [Op.iLike] : city } }
+                where = {
+                    [Op.and]:
+                    [
+                        { tag: { [Op.ne] : null } },
+                        { tag: { [Op.ne] : '' } },
+                        { store_city: { [Op.iLike] : city }  }
+                    ]
+                } 
                 limit = 1;
 
             }
@@ -90,6 +98,27 @@ class StoreLogic {
         }
     }
 
+    static async findAllKecamatan(city)
+    {
+        try{
+
+            let areas  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_kecamatan')), 'kecamatan']],
+                where:{
+                    store_city :{
+                        [Op.iLike]:city
+                    } 
+                }
+            });
+
+            return { success: true, payload: areas }
+        }
+        catch (error)
+        {
+            console.log(error)
+            throw { success: false, message: '', error: error };
+        }
+    }
     static async findAllNoLimit(area)
     {
         try{
@@ -167,20 +196,37 @@ class StoreLogic {
     {
         try{
             let where = {
-                [Op.or] : [
-                    {store_name: { [Op.iLike] : '%' + keyword + '%' }},
-                    {storeid: { [Op.iLike] : '%' + keyword + '%' }}
+                [Op.and]:[
+                    {
+                        [Op.and] :
+                        [
+                            { tag: { [Op.ne] : null } },
+                            { tag: { [Op.ne] : '' } }
+                        ]
+                    }
+                    ,
+                    {
+                        [Op.or] : [
+                            {store_name: { [Op.iLike] : '%' + keyword + '%' }},
+                            {storeid: { [Op.iLike] : '%' + keyword + '%' }}
+                        ]
+                    }
+
                 ]
+
             };
+
+
 
             if(city != null)
             {
-                where = {
+                where[Op.and].push({store_city: { [Op.iLike] : city }})
+                /*where = {
                     [Op.and] : [
                         where,
                         {store_city: { [Op.iLike] : city }}   
                     ]
-                }
+                }*/
             }
 
             let stores  = await StoreModel.findAll({
@@ -194,6 +240,7 @@ class StoreLogic {
         }
         catch (error)
         {
+            console.log(error)
             throw { success: false, message: '', error: error };
         }
     }
@@ -216,6 +263,7 @@ class StoreLogic {
         if(result.success){
             try {
                 
+                store = StoreLogic.upper(store);
                 let newStore = await StoreModel.create(store);
                 //newUser = this.clear(user)
                 result.payload = newStore;
@@ -260,8 +308,25 @@ class StoreLogic {
         if(store.store_city == null || store.store_city.trim().length == 0)
             return { success: false, message: 'Masukkan kota/kabupaten outlet' }
         if(store.store_area == null || store.store_area.trim().length == 0)
-            return { success: false, message: 'Masukkan areea outlet' }
+            return { success: false, message: 'Masukkan area outlet' }
+        if(store.store_cluster == null || store.store_cluster.trim().length == 0)
+            return { success: false, message: 'Masukkan cluster outlet' }
+        if(store.store_region == null || store.store_region.trim().length == 0)
+            return { success: false, message: 'Masukkan region outlet' }
+        if(store.store_branch == null || store.store_branch.trim().length == 0)
+            return { success: false, message: 'Masukkan branch outlet' }
         return { success: true, message: '' }
+    }
+
+    static upper(store)
+    {
+        store.store_area = store.store_area.toUpperCase();
+        store.store_city = store.store_city.toUpperCase();
+        store.store_cluster = store.store_cluster.toUpperCase();
+        store.store_region = store.store_region.toUpperCase();
+        store.store_branch = store.store_branch.toUpperCase();
+
+        return store;
     }
 
     static async findByUserOrSFCode(username, sfcode)
@@ -271,9 +336,22 @@ class StoreLogic {
             let cond1 = { username: {[Op.iLike] : '%' + username + '%' } };
             let cond2 = { sfcode: {[Op.iLike] : '%' + sfcode + '%' } };
             let cond = {
-                [Op.or]: [
-                    cond1, cond2
+                [Op.and]:[
+                    {
+                        [Op.or]: [
+                            cond1, cond2
+                        ]
+                    }
+                    ,
+                    {
+                        [Op.and] :
+                        [
+                            { tag: { [Op.ne] : null } },
+                            { tag: { [Op.ne] : '' } }
+                        ]
+                    }
                 ]
+                
             }
 
             //cond = cond2;
@@ -287,7 +365,22 @@ class StoreLogic {
                 storeids.push(store.storeid);
             })
 
-            stores = await StoreModel.findAll({ where: { storeid : {  [Op.in]: storeids } }})
+
+            stores  = await StoreModel.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                where:{ 
+                    [Op.and]:[
+                        { storeid : {  [Op.in]: storeids } },
+                        { tag : {
+                            [Op.ne] : null
+                        } },
+                        { tag : {
+                            [Op.ne] : ''
+                        } }
+                    ]
+                     
+                }            
+            });
 
             return { success: true, payload: stores }
         }
@@ -304,9 +397,22 @@ class StoreLogic {
             let cond1 = { username: {[Op.iLike] : '%' + username + '%' } };
             let cond2 = { sfcode: {[Op.iLike] : '%' + sfcode + '%' } };
             let cond = {
-                [Op.or]: [
-                    cond1, cond2
+                [Op.and]:[
+                    {
+                        [Op.or]: [
+                            cond1, cond2
+                        ]
+                    }
+                    ,
+                    {
+                        [Op.and] :
+                        [
+                            { tag: { [Op.ne] : null } },
+                            { tag: { [Op.ne] : '' } }
+                        ]
+                    }
                 ]
+                
             }
             let stores  = await StoreUserModel.findAll({
                 where: cond

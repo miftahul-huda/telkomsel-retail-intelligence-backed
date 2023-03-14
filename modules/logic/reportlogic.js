@@ -452,7 +452,7 @@ class ReportLogic {
                 su."username" like '${username}'
                 `;
 
-   
+            //console.log(query)
 
             let result = await sequelize.query(query, { type: QueryTypes.SELECT });
             result = ReportLogic.setStatus(result);

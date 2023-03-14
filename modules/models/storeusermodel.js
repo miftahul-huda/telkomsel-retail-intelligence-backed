@@ -7,7 +7,9 @@ class StoreUserModel extends Model {
             storeid: DataTypes.STRING,
             store_name: DataTypes.STRING,
             username: DataTypes.STRING,
-            sfcode: DataTypes.STRING        }, 
+            sfcode: DataTypes.STRING,
+            tag: DataTypes.STRING        
+        }, 
         { sequelize, modelName: 'store_user', tableName: 'store_user', force: force });
     }
 }

@@ -15,7 +15,10 @@ class StoreModel extends Model {
             store_area: DataTypes.STRING,
             store_region: DataTypes.STRING,
             store_branch: DataTypes.STRING,
-            sf_code:  DataTypes.STRING
+            store_cluster: DataTypes.STRING,
+            store_kecamatan: DataTypes.STRING,
+            sf_code:  DataTypes.STRING,
+            tag: DataTypes.STRING
         }, 
         { sequelize, modelName: 'store', tableName: 'store', force: force });
     }

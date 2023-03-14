@@ -13,5 +13,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+
+ENV DEPLOYMENT DEV
+ENV VERSION 2.0.0
+
 EXPOSE 8080
 CMD [ "node", "app.js" ]

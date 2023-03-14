@@ -10,6 +10,7 @@ const {Datastore} = require('@google-cloud/datastore');
 const {DatastoreStore} = require('@google-cloud/connect-datastore');
 
 var Initialization = require("./initialization")
+//var Initialization = require("./initialization-with-sm")
 
 
 const port = process.env.PORT;

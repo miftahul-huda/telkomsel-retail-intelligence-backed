@@ -192,11 +192,14 @@ class UploadFileLogic {
             let found = await StoreUserModel.findOne({ where: { [Op.and]: { storeid: outletid, sfcode: sfcode}  } });
             if(found == null)
             {
+                var todayDate = new Date().toISOString().slice(0, 10);
+
                 let newStoreUser = {};
                 newStoreUser.storeid = outletid;
                 newStoreUser.store_name = outletname;
                 newStoreUser.username = username;
                 newStoreUser.sfcode = sfcode;
+                newStoreUser.tag = "automatic-" + todayDate;
     
                 await StoreUserModel.create(newStoreUser);
             }
@@ -292,34 +295,35 @@ class UploadFileLogic {
 
     static initTotalSales(totalSales)
     {
-        if(totalSales.isiUlang != null && totalSales.isiUlang.toString().trim() == "" )
+        if( totalSales.isiUlang == null || totalSales.isiUlang.toString().trim() == "" )
             totalSales.isiUlang = 0;
-        if(totalSales.totalRataPenjualan != null && totalSales.totalRataPenjualan.toString().trim() == "" )
+        if(totalSales.totalRataPenjualan == null || totalSales.totalRataPenjualan.toString().trim() == "" )
             totalSales.totalRataPenjualan = 0;
-        if(totalSales.totalPenjualanKartuPerdanaMicro != null && totalSales.totalPenjualanKartuPerdanaMicro.toString().trim() == "" )
+        if(totalSales.totalPenjualanKartuPerdanaMicro == null || totalSales.totalPenjualanKartuPerdanaMicro.toString().trim() == "" )
             totalSales.totalPenjualanKartuPerdanaMicro = 0;
-        if(totalSales.totalPenjualanKartuPerdanaLow != null && totalSales.totalPenjualanKartuPerdanaLow.toString().trim() == "" )
+        if(totalSales.totalPenjualanKartuPerdanaLow == null || totalSales.totalPenjualanKartuPerdanaLow.toString().trim() == "" )
             totalSales.totalPenjualanKartuPerdanaLow = 0;
-        if(totalSales.totalPenjualanKartuPerdanaMid != null && totalSales.totalPenjualanKartuPerdanaMid.toString().trim() == "" )
+        if(totalSales.totalPenjualanKartuPerdanaMid == null || totalSales.totalPenjualanKartuPerdanaMid.toString().trim() == "" )
             totalSales.totalPenjualanKartuPerdanaMid = 0;
-        if(totalSales.totalPenjualanKartuPerdanaHigh != null && totalSales.totalPenjualanKartuPerdanaHigh.toString().trim() == "" )
+        if(totalSales.totalPenjualanKartuPerdanaHigh == null || totalSales.totalPenjualanKartuPerdanaHigh.toString().trim() == "" )
             totalSales.totalPenjualanKartuPerdanaHigh = 0;
-        if(totalSales.totalPenjualanVoucherFisikMicro != null && totalSales.totalPenjualanVoucherFisikMicro.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisikMicro == null || totalSales.totalPenjualanVoucherFisikMicro.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisikMicro = 0;
-        if(totalSales.totalPenjualanVoucherFisikLow != null && totalSales.totalPenjualanVoucherFisikLow.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisikLow == null || totalSales.totalPenjualanVoucherFisikLow.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisikLow = 0;     
-        if(totalSales.totalPenjualanVoucherFisikLow != null && totalSales.totalPenjualanVoucherFisikLow.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisikLow == null || totalSales.totalPenjualanVoucherFisikLow.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisikLow = 0;   
-        if(totalSales.totalPenjualanVoucherFisikMid != null && totalSales.totalPenjualanVoucherFisikMid.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisikMid == null || totalSales.totalPenjualanVoucherFisikMid.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisikMid = 0;   
-        if(totalSales.totalPenjualanVoucherFisikHigh != null && totalSales.totalPenjualanVoucherFisikHigh.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisikHigh == null || totalSales.totalPenjualanVoucherFisikHigh.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisikHigh = 0;   
-        if(totalSales.totalPenjualanVoucherFisik != null && totalSales.totalPenjualanVoucherFisik.toString().trim() == "" )
+        if(totalSales.totalPenjualanVoucherFisik == null || totalSales.totalPenjualanVoucherFisik.toString().trim() == "" )
             totalSales.totalPenjualanVoucherFisik = 0;   
-        if(totalSales.totalPenjualanPerdana != null && totalSales.totalPenjualanPerdana.toString().trim() == "" )
+        if(totalSales.totalPenjualanPerdana == null || totalSales.totalPenjualanPerdana.toString().trim() == "" )
             totalSales.totalPenjualanPerdana = 0;   
-        if(totalSales.paketPalingBanyakDibeliBesaran != null && totalSales.paketPalingBanyakDibeliBesaran.toString().trim() == "" )
+        if(totalSales.paketPalingBanyakDibeliBesaran == null || totalSales.paketPalingBanyakDibeliBesaran.toString().trim() == "" )
             totalSales.paketPalingBanyakDibeliBesaran = 0; 
+
 
         return totalSales;        
     }

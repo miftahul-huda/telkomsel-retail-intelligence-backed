@@ -36,9 +36,9 @@ const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 
 class Initialization {
 
-    static getSequelize()
+    static async getSequelize()
     {
-        /*
+        
         const client = new SecretManagerServiceClient();
         let projectId = process.env.GCP_PROJECT_ID;
         let env = process.env.DEPLOYMENT;
@@ -73,15 +73,6 @@ class Initialization {
         });
         const dbpassword = accessResponse.payload.data.toString('utf8');
 
-        */
-
-
-        let dbname = process.env.DBNAME;
-        let dbuser = process.env.DBUSER;
-        let dbpassword = process.env.DBPASSWORD;
-        let dbhost = process.env.DBHOST;
-        console.log("db : " + dbname)
-
         const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
             host: dbhost,
             dialect: process.env.DBENGINE,
@@ -95,7 +86,7 @@ class Initialization {
 
         let force = false;
 
-        let sequelize =  Initialization.getSequelize();
+        let sequelize =  await Initialization.getSequelize();
 
         CountryAndCityModel.initialize(sequelize);
 
