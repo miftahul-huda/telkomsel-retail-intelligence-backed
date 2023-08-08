@@ -1,17 +1,17 @@
-const LogModel  = require( '../models/logmodel')
+const KeywordModel  = require( '../models/keywordmodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 
 
-class LogLogic {
+class KeywordLogic {
 
-    static async create(log)
+    static async create(keyword)
     {
-        let result = this.validateCreate(log);
+        let result = this.validateCreate(keyword);
         if(result.success){
             try {
-                let newlog = await LogModel.create(log);
-                result.payload = newlog;
+                let newkeyword = await KeywordModel.create(keyword);
+                result.payload = newkeyword;
                 return  result;
             }
             catch(error)
@@ -30,12 +30,12 @@ class LogLogic {
     static async findAll()
     {
         try{
-            let logs  = await LogModel.findAll({
+            let keywords  = await KeywordModel.findAll({
                 order:[
-                    ['logDate', 'DESC']
+                    ['id', 'DESC']
                 ]
             })
-            return { success: true, payload: logs }
+            return { success: true, payload: keywords }
         }
         catch (error)
         {
@@ -46,16 +46,16 @@ class LogLogic {
     static async findByKeyword(search)
     {
         try{
-            let logs  = await LogModel.findAll({
+            let keywords  = await KeywordModel.findAll({
                 where: {
                     [Op.or] : [
-                        {logname: { [Op.like] : '%' + search.logname + '%' }},
-                        {logdescription: { [Op.like] : '%' + search.firstname + '%' }}
+                        {wordID: { [Op.like] : '%' + search.wordID + '%' }},
+                        {wordEN: { [Op.like] : '%' + search.wordEN + '%' }}
                     ]
 
                 }
             })
-            return { success: true, payload: logs }
+            return { success: true, payload: keywords }
         }
         catch (error)
         {
@@ -66,7 +66,7 @@ class LogLogic {
     static async get(id)
     {
         try{
-            let log  = await LogModel.findByPk(id);
+            let keyword  = await KeywordModel.findByPk(id);
 
             return { success: true, payload: clone }
         }
@@ -76,13 +76,13 @@ class LogLogic {
         }
     }
 
-    static async update(id,  log)
+    static async update(id,  keyword)
     {
-        let result = this.successate(log);
+        let result = this.validate(keyword);
         if(result.success){
             try {
-                let newlog = await LogModel.update(log, { where:  { id: id }  });
-                result.payload = newlog;
+                let newkeyword = await KeywordModel.update(keyword, { where:  { id: id }  });
+                result.payload = newkeyword;
                 return  result;
             }
             catch(error)
@@ -102,7 +102,7 @@ class LogLogic {
     {
         try{
 
-            let result = await LogModel.destroy({ where: { id: id }});
+            let result = await KeywordModel.destroy({ where: { id: id }});
             return { success: true, payload: result }
         }
         catch (error)
@@ -111,15 +111,15 @@ class LogLogic {
         }
     }
 
-    static validateCreate(log){
+    static validateCreate(keyword){
         
-        return this.validate(log);
+        return this.validate(keyword);
     }
 
-    static validate(log)
+    static validate(keyword)
     {   
         return {success :  true, message: "Succesfull"}
     }
 }
 
-module.exports = LogLogic;
+module.exports = KeywordLogic;

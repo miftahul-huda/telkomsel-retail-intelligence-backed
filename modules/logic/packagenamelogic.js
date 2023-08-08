@@ -2,11 +2,6 @@ const PackageNameModel  = require( '../models/packagenamemodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
-
 class PackageNameLogic {
 
     static async findAll(operator)

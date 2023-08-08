@@ -4,10 +4,6 @@ const { Op } = require("sequelize");
 const Initialization = require('../../initialization');
 const UploadFileModel = require('../models/uploadfilemodel');
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
 
 class ItemSubCategoryTypeLogic {
 

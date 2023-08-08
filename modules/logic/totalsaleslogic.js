@@ -2,10 +2,6 @@ const TotalSalesModel  = require( '../models/totalsalesmodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
 
 class TotalSalesLogic {
 

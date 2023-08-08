@@ -4,6 +4,7 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 const { condition } = require('sequelize');
 const CityRegionAreaModel = require('../models/cityregionareamodel');
+const StoreLocationModel = require('../models/storelocationmodel');
 
 
 class LocationLogic {
@@ -58,6 +59,14 @@ class LocationLogic {
                 attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('district')), 'district']],
                 where: where
             });
+
+            if(districts == null || districts.length == 0)
+            {
+                districts  = await StoreLocationModel.findAll({
+                    attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('district')), 'district']],
+                    where: where
+                });
+            }
             return { success: true, payload: districts }
         }
         catch (error)
@@ -95,6 +104,68 @@ class LocationLogic {
                 attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('area')), 'area']]
             });
             return { success: true, payload: areas }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+
+
+    static async findAllCitiesByCluster(cluster)
+    {
+        try{
+
+            let cities  = await StoreLocationModel.findAll({
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('city')), 'city']],
+                where: {
+                    cluster: {
+                        [Op.iLike]: cluster
+                    }
+                }
+            });
+            return { success: true, payload: cities }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllClustersByBranch(branch)
+    {
+        try{
+
+            let clusters  = await StoreLocationModel.findAll({
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('cluster')), 'cluster']],
+                where: {
+                    branch: {
+                        [Op.iLike]: branch
+                    }
+                }
+            });
+            return { success: true, payload: clusters }
+        }
+        catch (error)
+        {
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async findAllBranchesByRegion(region)
+    {
+        try{
+
+            let branches  = await StoreLocationModel.findAll({
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('branch')), 'branch']],
+                where: {
+                    region: {
+                        [Op.iLike]: region
+                    }
+                }
+            });
+            return { success: true, payload: branches }
         }
         catch (error)
         {

@@ -2,11 +2,6 @@ const OperatorModel  = require( '../models/operatormodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
-
 class OperatorLogic {
 
     static async findAll()

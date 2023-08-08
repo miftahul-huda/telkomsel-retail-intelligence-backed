@@ -25,8 +25,8 @@ const CurrentCycleModel = require("./modules/models/currentcyclemodel")
 const OutletScoreModel = require("./modules/models/outletscoremodel")
 const LocationModel = require("./modules/models/locationmodel")
 const CityRegionAreaModel = require("./modules/models/cityregionareamodel")
-
-
+const StoreLocationModel = require("./modules/models/storelocationmodel")
+const KeywordModel = require("./modules/models/keywordmodel")
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const PosterItemModel = require('./modules/models/posteritemmodel')
@@ -154,6 +154,9 @@ class Initialization {
 
         CityRegionAreaModel.initialize(sequelize, force);
 
+        StoreLocationModel.initialize(sequelize, force);
+
+        KeywordModel.initialize(sequelize, force);
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
 

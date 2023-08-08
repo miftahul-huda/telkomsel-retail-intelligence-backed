@@ -30,6 +30,8 @@
     { "path" :  "/posteritem", "router"  : "./routes/posteritem" },
     { "path" :  "/notification", "router"  : "./routes/notification" },
     { "path" :  "/currentcycle", "router"  : "./routes/currentcycle" },
-    { "path" :  "/location", "router"  : "./routes/location" }
+    { "path" :  "/location", "router"  : "./routes/location" },
+    { "path" :  "/keyword", "router"  : "./routes/keyword" }
+
 
 ]

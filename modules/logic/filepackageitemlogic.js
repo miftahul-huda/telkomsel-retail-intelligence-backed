@@ -5,10 +5,6 @@ const Initialization = require('../../initialization');
 const UploadFileModel = require('../models/uploadfilemodel');
 const FilePackageSubItemModel = require('../models/filepackagesubitemmodel');
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
 
 class FilePackageItemLogic {
 

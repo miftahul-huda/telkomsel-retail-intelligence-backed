@@ -17,6 +17,7 @@ class StoreModel extends Model {
             store_branch: DataTypes.STRING,
             store_cluster: DataTypes.STRING,
             store_kecamatan: DataTypes.STRING,
+            store_kelurahan: DataTypes.STRING,
             sf_code:  DataTypes.STRING,
             tag: DataTypes.STRING
         }, 

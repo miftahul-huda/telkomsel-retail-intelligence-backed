@@ -74,6 +74,54 @@ router.get('/villages/:district', function (req, res){
   })
 })
 
+router.get('/districts/:city', function (req, res){
+  let city = req.params.city;
+  LocationLogic.findAllDistrictsByCity(city).then(function (districts)
+  {
+    res.send(districts);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+router.get('/cities/:cluster', function (req, res){
+  let cluster = req.params.cluster;
+  LocationLogic.findAllCitiesByCluster(cluster).then(function (cities)
+  {
+    res.send(cities);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+router.get('/clusters/:branch', function (req, res){
+  let branch = req.params.branch;
+  LocationLogic.findAllClustersByBranch(branch).then(function (clusters)
+  {
+    res.send(clusters);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
+router.get('/branches/:region', function (req, res){
+  let region = req.params.region;
+  LocationLogic.findAllBranchesByRegion(region).then(function (branches)
+  {
+    res.send(branches);
+  }).catch(function (err){
+    console.log("error")
+    console.log(err)
+    res.send(err);
+  })
+})
+
 router.get('/regions/:area', function (req, res){
   let area = req.params.area;
   LocationLogic.findAllRegionsByArea(area).then(function (regions)

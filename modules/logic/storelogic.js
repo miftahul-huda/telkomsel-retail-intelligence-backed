@@ -6,11 +6,6 @@ const { Op } = require("sequelize");
 const { condition } = require('sequelize');
 const { Store } = require('express-session');
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/users.sqlite'
-});
-
 class StoreLogic {
 
     static async findAll(area)
@@ -21,7 +16,7 @@ class StoreLogic {
                 where = {  store_area: { [Op.iLike] : area } }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where,
                 limit: 1
             });
@@ -54,7 +49,7 @@ class StoreLogic {
             }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where,
                 limit: limit
             });
@@ -71,7 +66,7 @@ class StoreLogic {
         try{
 
             let cities  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_city')), 'city']]
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('store_city')), 'city']]
             });
 
             return { success: true, payload: cities }
@@ -87,7 +82,7 @@ class StoreLogic {
         try{
 
             let areas  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_area')), 'area']]
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('store_area')), 'area']]
             });
 
             return { success: true, payload: areas }
@@ -103,7 +98,7 @@ class StoreLogic {
         try{
 
             let areas  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('store_kecamatan')), 'kecamatan']],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('store_kecamatan')), 'kecamatan']],
                 where:{
                     store_city :{
                         [Op.iLike]:city
@@ -127,7 +122,7 @@ class StoreLogic {
                 where = {  store_area: { [Op.iLike] : area } }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where
             });
             return { success: true, payload: stores }
@@ -146,7 +141,7 @@ class StoreLogic {
                 where = {  store_city: { [Op.iLike] : city } }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where
             });
             return { success: true, payload: stores }
@@ -178,7 +173,7 @@ class StoreLogic {
             }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_area', 'store_city'],
                 where: where,
                 limit: 1
             });
@@ -230,7 +225,7 @@ class StoreLogic {
             }
 
             let stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where: where,
                 limit: 3
             });
@@ -367,7 +362,7 @@ class StoreLogic {
 
 
             stores  = await StoreModel.findAll({
-                attributes: [[sequelize.fn('DISTINCT', sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
+                attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('storeid')), 'storeid'], 'store_name', 'store_city', 'store_area'],
                 where:{ 
                     [Op.and]:[
                         { storeid : {  [Op.in]: storeids } },
