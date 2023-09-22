@@ -89,6 +89,8 @@ class UploadFileLogic {
                 {
                     uploadfile.storeFrontItems.forEach((item)=>{
                         item.upload_file_id  = newUploadFile.id;
+                        //item.availability_percentage = item.percentage;
+                        item.visibility_percentage = item.percentage;
                         UploadFileLogic.initStoreFrontItem(item);
                     })
                     await UploadFileLogic.createStoreFrontItems(uploadfile.storeFrontItems);

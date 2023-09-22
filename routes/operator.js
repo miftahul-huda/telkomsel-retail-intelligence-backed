@@ -5,7 +5,7 @@ const OperatorLogic = require("../modules/logic/operatorlogic");
 
 
 router.get('/', function (req, res){
-
+  console.log(req)
   OperatorLogic.findAll().then(function (operators)
   {
     console.log(operators);

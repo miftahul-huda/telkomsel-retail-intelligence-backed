@@ -10,6 +10,7 @@ const {Datastore} = require('@google-cloud/datastore');
 const {DatastoreStore} = require('@google-cloud/connect-datastore');
 
 var Initialization = require("./initialization")
+const jwtAuth = require("./modules/utils/jwtauth")
 //var Initialization = require("./initialization-with-sm")
 
 
@@ -27,6 +28,14 @@ var app = express();
 app.use(express.json({type: '*/*'}));
 // parse application/json
 app.use(bodyParser.json())
+
+//Jwt token verification
+if(process.env.USE_JWT.toLowerCase() == "true")
+{
+  console.log("Using JWT")
+  app.use(jwtAuth)
+
+}
 
 /*app.use(session({
   store: new DatastoreStore({
@@ -94,6 +103,6 @@ app.listen(process.env.APPLICATION_PORT)
 
 Initialization.initializeDatabase();
 
-console.log("Authentication server on  port : " + process.env.APPLICATION_PORT)
+console.log("Retail Intelligence server on  port : " + process.env.APPLICATION_PORT)
 
 module.exports = app;

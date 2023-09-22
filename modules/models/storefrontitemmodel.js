@@ -7,8 +7,13 @@ class StoreFrontItemModel extends Model {
             operator:  DataTypes.STRING,
             operatorText: DataTypes.STRING,
             percentage: DataTypes.DECIMAL,
+            availability_percentage: DataTypes.DECIMAL,
+            availability_score: DataTypes.DECIMAL,
+            visibility_percentage: DataTypes.DECIMAL,
+            visibility_score: DataTypes.DECIMAL,
             upload_file_id: DataTypes.INTEGER,
             /*
+
             productHero: DataTypes.STRING,
             gbmain: DataTypes.DECIMAL,
             gbmain_duration_days: DataTypes.INTEGER,
