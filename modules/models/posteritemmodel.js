@@ -12,7 +12,7 @@ class PosterItemModel extends Model {
             transferPrice: DataTypes.DECIMAL,
             endUserPrice: DataTypes.DECIMAL,
             upload_file_id: DataTypes.INTEGER,
-
+            salesRecommendedPrice: DataTypes.DECIMAL
         }, 
         { sequelize, modelName: 'posteritem', tableName: 'posteritem', force: force });
     }

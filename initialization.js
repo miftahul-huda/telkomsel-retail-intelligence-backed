@@ -27,6 +27,7 @@ const LocationModel = require("./modules/models/locationmodel")
 const CityRegionAreaModel = require("./modules/models/cityregionareamodel")
 const StoreLocationModel = require("./modules/models/storelocationmodel")
 const KeywordModel = require("./modules/models/keywordmodel")
+const CitySRPModel = require("./modules/models/citysrpmodel")
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const PosterItemModel = require('./modules/models/posteritemmodel')
@@ -81,6 +82,8 @@ class Initialization {
         let dbpassword = process.env.DBPASSWORD;
         let dbhost = process.env.DBHOST;
         console.log("db : " + dbname)
+        console.log("db host : " + dbhost)
+
 
         const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
             host: dbhost,
@@ -157,6 +160,9 @@ class Initialization {
         StoreLocationModel.initialize(sequelize, force);
 
         KeywordModel.initialize(sequelize, force);
+
+        CitySRPModel.initialize(sequelize, force);
+
 
         //SubOperatorModel.belongsTo(OperatorModel, { foreignKey: 'operator_id' } )
 

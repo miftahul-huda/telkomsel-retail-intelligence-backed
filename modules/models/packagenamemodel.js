@@ -5,7 +5,8 @@ class PackageNameModel extends Model {
     { 
         super.init({
             package_name: DataTypes.STRING,
-            operator: DataTypes.STRING
+            operator: DataTypes.STRING,
+            quota: DataTypes.DECIMAL
         }, 
         { sequelize, modelName: 'packagename', tableName: 'packagename', force: force });
     }

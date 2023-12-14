@@ -143,4 +143,21 @@ router.get('/delete/:id', function (req, res){
   })
 })
 
+
+router.get('/find-between', function (req, res){
+  let startDate = req.query.start;
+  let endDate = req.query.end;
+
+  console.log("hre")
+
+  UploadFileLogic.findByDate(startDate, endDate).then(function (result)
+  {
+    res.send(result);
+  }).catch(function (err){
+    console.log("error")
+    res.send(err);
+  })
+})
+
+
 module.exports = router;

@@ -31,7 +31,8 @@
     { "path" :  "/notification", "router"  : "./routes/notification" },
     { "path" :  "/currentcycle", "router"  : "./routes/currentcycle" },
     { "path" :  "/location", "router"  : "./routes/location" },
-    { "path" :  "/keyword", "router"  : "./routes/keyword" }
+    { "path" :  "/keyword", "router"  : "./routes/keyword" },
+    { "path" :  "/citysrp", "router"  : "./routes/citysrp" }
 
 
 ]

@@ -90,7 +90,7 @@ class UploadFileLogic {
                     uploadfile.storeFrontItems.forEach((item)=>{
                         item.upload_file_id  = newUploadFile.id;
                         //item.availability_percentage = item.percentage;
-                        item.visibility_percentage = item.percentage;
+                        //item.visibility_percentage = item.percentage;
                         UploadFileLogic.initStoreFrontItem(item);
                     })
                     await UploadFileLogic.createStoreFrontItems(uploadfile.storeFrontItems);
@@ -539,6 +539,46 @@ class UploadFileLogic {
         let result = {success :  true, message: "Succesfull"};
 
         return result;
+    }
+    
+
+    static async findByDate(startDate, endDate)
+    {
+        startDate = startDate + " 00:00:00";
+        endDate = endDate + " 23:59:59";
+
+        console.log("startdate")
+        console.log(startDate)
+
+        console.log("enddate")
+        console.log(endDate)
+
+        let promise  = new Promise(async (resolve, reject)=>{
+            try{
+                let uploadFiles = await UploadFileModel.findAll({
+                    where:{
+                        [Op.and]:
+                        [
+                            {upload_date: {
+                                [Op.gte]: startDate
+                            }}
+                            ,
+                            {upload_date: {
+                                [Op.lte]: endDate
+                            }}
+                        ]
+                    }
+                });
+
+                resolve({ success: true,payload: uploadFiles });
+            }
+            catch(e)
+            {
+                reject({ success: false, message: e.message });
+            }
+        });
+        
+        return promise;
     }
 }
 
