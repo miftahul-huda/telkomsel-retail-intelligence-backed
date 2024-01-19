@@ -8,6 +8,7 @@ class OperatorModel extends Model {
             operator_value: DataTypes.STRING,
             operator_logo: DataTypes.TEXT,
             color: DataTypes.STRING,
+            ordering: DataTypes.INTEGER
         }, 
         { sequelize, modelName: 'operator', tableName: 'operator', force: force });
     }

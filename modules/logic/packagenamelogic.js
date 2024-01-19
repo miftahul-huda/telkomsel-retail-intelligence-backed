@@ -13,6 +13,10 @@ class PackageNameLogic {
                 where: {
                     operator : operator
                 }
+                ,
+                order: [
+                    ["ordering", "ASC"]
+                ]
             };
 
             if(operator == "*")

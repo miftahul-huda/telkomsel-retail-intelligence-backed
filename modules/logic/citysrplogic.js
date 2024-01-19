@@ -2,7 +2,8 @@ const CitySRPModel  = require( '../models/citysrpmodel')
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
 const StoreModel = require('../models/storemodel');
-
+const UploadFileModel = require('../models/uploadfilemodel');
+const Initialization = require("../../initialization")
 
 class CitySRPLogic {
 
@@ -10,7 +11,9 @@ class CitySRPLogic {
     {
         try{
             let store = await StoreModel.findOne({
-                storeid : outletid
+                where: {
+                    storeid : outletid
+                }
             });
 
             let city = null;
@@ -18,6 +21,13 @@ class CitySRPLogic {
             {
                 city = store.store_city;
             }
+            /*
+            console.log("outletid")
+            console.log(outletid)
+
+            console.log("city")
+            console.log(city)
+            */
             if(city != null)
             {
                 let package_name = packageName.replace(/\s/gi, "");
@@ -25,7 +35,7 @@ class CitySRPLogic {
                     where: {
                         [Op.and]:
                         [
-                            {city : {[Op.iLike]: city }},
+                            {city : {[Op.iLike]: "" + city + "" }},
                             { columnWithFunction: Sequelize.where(Sequelize.fn("REPLACE", Sequelize.col("packageName"), " ", ""), "ilike", package_name )} 
                         ]
                     }
@@ -38,6 +48,22 @@ class CitySRPLogic {
         }
         catch (error)
         {
+            console.log(error);
+            throw { success: false, message: '', error: error };
+        }
+    }
+
+    static async processSalesRecommendedPrice(dt1, dt2)
+    {
+        try {
+
+            let sequelize = Initialization.getSequelize();
+            let items = await sequelize.query("select u.*, p.id as posterItemId, p.packageName from uploadfile u where u.upload_date between '" + dt1 + "' and '" + dt2 + "' inner join posteritem p on u.id = p.upload_file_id")
+            items.map((item)=>{
+                
+            })
+            
+        } catch (error) {
             console.log(error);
             throw { success: false, message: '', error: error };
         }
