@@ -88,7 +88,7 @@ class Initialization {
         const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
             host: dbhost,
             dialect: process.env.DBENGINE,
-            logging: true
+            logging: false
         });
 
         return sequelize;

@@ -7,7 +7,9 @@ class OperatorLogic {
     static async findAll()
     {
         try{
-            let operators  = await OperatorModel.findAll();
+            let operators  = await OperatorModel.findAll({
+                order: [["ordering", "ASC"]]
+            });
             return { success: true, payload: operators }
         }
         catch (error)
